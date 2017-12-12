@@ -123,7 +123,17 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <webappDirectory>target</webappDirectory>
+                    <webappDirectory>src/main/webapp</webappDirectory>
+                    <warName>SnapAPP</warName>
+                    <webResources>
+                            <resource>
+                                <directory>src/main/resources</directory>
+                                <excludes>
+                                    <exclude>*.properties</exclude>
+                                </excludes>
+                            </resource>
+
+                        </webResources>
                 </configuration>
             </plugin>
         </plugins>
