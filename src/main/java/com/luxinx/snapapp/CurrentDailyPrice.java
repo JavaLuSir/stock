@@ -16,8 +16,8 @@ import java.util.*;
 
 public class CurrentDailyPrice {
 	
-	public static List<Map<String,String>> STOCK_CODE_FOCUS = new ArrayList<Map<String,String>>();
-	
+	public static List<Map<String,String>> STOCK_CODE_FOCUS = new ArrayList<>();
+
 	private Logger log  = Logger.getLogger(CurrentDailyPrice.class);
 	
 	private boolean TODAY_EXEC = true;
@@ -29,6 +29,7 @@ public class CurrentDailyPrice {
 			
 			@Override
 			public void run() {
+
 				setTodayExecTrue();//00:00:00  -- 00:01:00
 				if(betweenExec("00:10:00","00:11:00")){
 					new StockCodeName().saveAllStocktoDB();
@@ -67,7 +68,7 @@ public class CurrentDailyPrice {
 
 			}
 		};
-		t.schedule(task, 0,1000*60);
+		t.schedule(task, 0,1000);
 	}
 
 	/*public static void main(String[] args) {
@@ -152,41 +153,14 @@ public class CurrentDailyPrice {
 				if("0".equals(issend)){
 					if("-1".equals(updown)){
 						if(detaprice<0){
-							String stockcode = focus.get("stockcode");
-							String stockname = focus.get("stockname");
-							
-							String strprecent=((detaprice/destprice)*100)+"";
-							if(strprecent.length()>4){
-								strprecent=strprecent.substring(0, 4);
-							}
-							String message = "股票("+stockcode+") "+stockname+" 已经跌破"+destprice+"元，当前价格为"+currprice+"元。距目标价振幅"+strprecent+"%";
-							try {
-								MailUtil.sendMessage("javalusir@163.com", message);
-								focus.put("issend", "1");
-								log.info("Email send...");
-							} catch (MessagingException e) {
-								e.printStackTrace();
-							}
+							String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经跌破");
+							EmailNotice(focus, message);
 						}
 					}
-					StringBuilder sasd = new StringBuilder();
-					sasd.append("",1,2);
 					if("1".equals(updown)){
 						if(detaprice>0){
-							String stockcode = focus.get("stockcode");
-							String stockname = focus.get("stockname");
-							String strprecent=((detaprice/destprice)*100)+"";
-							if(strprecent.length()>4){
-								strprecent=strprecent.substring(0, 4);
-							}
-							String message = "股票("+stockcode+") "+stockname+" 已经涨过"+destprice+"元，当前价格为"+currprice+"元。距目标价振幅"+strprecent+"%";
-							try {
-								MailUtil.sendMessage("javalusir@163.com", message);
-								focus.put("issend", "1");
-								log.info("Email send...");
-							} catch (MessagingException e) {
-								e.printStackTrace();
-							}
+							String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经涨过");
+							EmailNotice(focus, message);
 						}
 					}
 				}
@@ -201,7 +175,41 @@ public class CurrentDailyPrice {
 		log.info("============================end===================================");
 	
 	}
-	
+
+	/**
+	 * get stock Percent
+	 * @param focus
+	 * @param destprice
+	 * @param currprice
+	 * @param detaprice
+	 * @param s
+	 * @return
+	 */
+	private String getPrecentStr(Map<String, String> focus, double destprice, double currprice, double detaprice, String s) {
+		String stockcode = focus.get("stockcode");
+		String stockname = focus.get("stockname");
+		String strprecent = ((detaprice / destprice) * 100) + "";
+		if (strprecent.length() > 4) {
+			strprecent = strprecent.substring(0, 4);
+		}
+		return "股票(" + stockcode + ") " + stockname + s + destprice + "元，当前价格为" + currprice + "元。距目标价振幅" + strprecent + "%";
+	}
+
+	/**
+	 * Send Email
+	 * @param focus
+	 * @param message
+	 */
+	private void EmailNotice(Map<String, String> focus, String message) {
+		try {
+            MailUtil.sendMessage("javalusir@163.com", message);
+            focus.put("issend", "1");
+            log.info("Email send...");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+	}
+
 	/**
 	 * 判断是否是工作日
 	 * @return
@@ -215,5 +223,5 @@ public class CurrentDailyPrice {
 	public static void main(String[] args) {
 		System.out.println(new CurrentDailyPrice().isWorkDay());
 	}
-	
+
 }
