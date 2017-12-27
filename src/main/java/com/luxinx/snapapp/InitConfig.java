@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 public class InitConfig extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	Logger log = Logger.getLogger(InitConfig.class);
+	private static final Logger log = Logger.getLogger(InitConfig.class);
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 	   ResourceBundle bundle = ResourceBundle.getBundle("config");
