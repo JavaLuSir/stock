@@ -3,16 +3,17 @@ package com.luxinx.snapapp;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.util.ResourceBundle;
 
+/**
+ * use to init config.properties and crond
+ */
 public class InitConfig extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Logger.getLogger(InitConfig.class);
 	@Override
-	public void init(ServletConfig config) throws ServletException {
+	public void init(ServletConfig config){
 	   ResourceBundle bundle = ResourceBundle.getBundle("config");
 	   Constant.DBDRIVER = bundle.getString("driver");
 	   Constant.DBURL = bundle.getString("url");

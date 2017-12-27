@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Servlet implementation class DisplayServlet
+ * Display web price
  */
 @WebServlet("/display")
 public class DisplayServlet extends HttpServlet {

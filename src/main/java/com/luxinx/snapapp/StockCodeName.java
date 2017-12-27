@@ -13,29 +13,34 @@ import java.util.Set;
 public class StockCodeName {
 
 	private Logger log = Logger.getLogger(StockCodeName.class);
+
 	public Set<Map<String,String>> getStockShName(){
 		long start = System.currentTimeMillis();
 		Set<Map<String,String>> set = new HashSet<Map<String,String>>();
 		for(int i=600001;i<604000;i++){
 			String url="http://hq.sinajs.cn/list=sh"+i;
-			try {
-				String returnurl = HttpUtil.doGet(url);
-				Map<String, String> mp = HttpUtil.dealResponse(returnurl,1);
-				if(!mp.isEmpty()){
-					set.add(mp);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			requestStock(set, url);
 		}
 		long end =System.currentTimeMillis();
 		log.info("get sh stock spend time:"+(end-start)+"ms");
 		return set;
 	}
-	
+
+	private void requestStock(Set<Map<String, String>> set, String url) {
+		try {
+            String returnurl = HttpUtil.doGet(url);
+            Map<String, String> mp = HttpUtil.dealResponse(returnurl,1);
+            if(!mp.isEmpty()){
+                set.add(mp);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+
 	public Set<Map<String,String>> getStockSzName(){
 		long start = System.currentTimeMillis();
-		Set<Map<String,String>> set = new HashSet<Map<String,String>>();
+		Set<Map<String,String>> set = new HashSet<>();
 		for(int i=1;i<3000;i++){
 			String code=i+"";
 			for(int j=0;j<5;j++){
@@ -45,16 +50,7 @@ public class StockCodeName {
 				code="0"+code;
 			}
 			String url="http://hq.sinajs.cn/list=sz"+code;
-			try {
-				String returnurl = HttpUtil.doGet(url);
-				Map<String, String> mp = HttpUtil.dealResponse(returnurl,1);
-
-				if(!mp.isEmpty()){
-					set.add(mp);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			requestStock(set, url);
 		}
 		try {
 			String url="http://hq.sinajs.cn/list=sz399001";

@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 /**
- * 
+ * DataBase Access Class
  * @author Administrator
  *
  */

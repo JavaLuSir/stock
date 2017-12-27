@@ -18,7 +18,7 @@ public class CurrentDailyPrice {
 	
 	public static List<Map<String,String>> STOCK_CODE_FOCUS = new ArrayList<>();
 
-	private Logger log  = Logger.getLogger(CurrentDailyPrice.class);
+	private static final Logger log  = Logger.getLogger(CurrentDailyPrice.class);
 	
 	private boolean TODAY_EXEC = true;
 	private boolean ANALY_EXEC = true;
@@ -194,8 +194,8 @@ public class CurrentDailyPrice {
 
 	/**
 	 * Send Email
-	 * @param focus
-	 * @param message
+	 * @param focus the stock of focus
+	 * @param message email notice message
 	 */
 	private void EmailNotice(Map<String, String> focus, String message) {
 		try {
