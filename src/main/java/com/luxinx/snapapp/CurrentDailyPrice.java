@@ -71,18 +71,15 @@ public class CurrentDailyPrice {
 		t.schedule(task, 0,1000);
 	}
 
-	/*public static void main(String[] args) {
-		new CurrentDailyPrice().monitor();
-	}*/
 //-----------------------------------------------------------------------------------------------	
 	public boolean betweenExec(String start,String end){
-		Date currentdate = DateUtil.getCurrentDate();
+		Date currentDate = DateUtil.getCurrentDate();
 		String today = DateUtil.getCurrentStr("yyyy-MM-dd");
-		String mintime=today+" "+start;
-		String maxtime=today+" "+end;
-		Date datemin = DateUtil.getStrToDate(mintime, "yyyy-MM-dd HH:mm:ss");
-		Date datemax = DateUtil.getStrToDate(maxtime, "yyyy-MM-dd HH:mm:ss");
-		if(currentdate.after(datemin)&&currentdate.before(datemax)){
+		String minTime=today+" "+start;
+		String maxTime=today+" "+end;
+		Date dateMin = DateUtil.getStrToDate(minTime, "yyyy-MM-dd HH:mm:ss");
+		Date dateMax = DateUtil.getStrToDate(maxTime, "yyyy-MM-dd HH:mm:ss");
+		if(currentDate.after(dateMin)&&currentDate.before(dateMax)){
 			return true;
 		}
 		return false;
@@ -98,11 +95,11 @@ public class CurrentDailyPrice {
 	}
 	
 	public boolean afterExec(String datestr){
-		Date currentdate = DateUtil.getCurrentDate();
+		Date currentDate = DateUtil.getCurrentDate();
 		String today = DateUtil.getCurrentStr("yyyy-MM-dd");
 		String allDaySync=today+" "+datestr;
-		Date hostorydaily = DateUtil.getStrToDate(allDaySync, "yyyy-MM-dd HH:mm:ss");
-		if(currentdate.after(hostorydaily)){
+		Date historyDaily = DateUtil.getStrToDate(allDaySync, "yyyy-MM-dd HH:mm:ss");
+		if(currentDate.after(historyDaily)){
 			return true;
 		}else{
 			return false;
