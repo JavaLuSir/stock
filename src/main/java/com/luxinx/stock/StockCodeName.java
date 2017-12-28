@@ -1,4 +1,4 @@
-package com.luxinx.snapapp;
+package com.luxinx.stock;
 
 import com.luxinx.db.DBConnection;
 import com.luxinx.util.HttpUtil;
@@ -10,13 +10,20 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+/**
+ * get stock info from http://hq.sinajs.cn/list=sh + code
+ */
 public class StockCodeName {
 
 	private Logger log = Logger.getLogger(StockCodeName.class);
 
+	/**
+	 * get all shanghai stock code and name
+	 * @return
+	 */
 	public Set<Map<String,String>> getStockShName(){
 		long start = System.currentTimeMillis();
-		Set<Map<String,String>> set = new HashSet<Map<String,String>>();
+		Set<Map<String,String>> set = new HashSet<>();
 		for(int i=600001;i<604000;i++){
 			String url="http://hq.sinajs.cn/list=sh"+i;
 			requestStock(set, url);
@@ -26,6 +33,11 @@ public class StockCodeName {
 		return set;
 	}
 
+	/**
+	 * request http://hq.sinajs.cn url and get stock and name put them to a set
+	 * @param set resultset
+	 * @param url http://hq.sinajs.cn/list=sh or list=sz ...
+	 */
 	private void requestStock(Set<Map<String, String>> set, String url) {
 		try {
             String returnurl = HttpUtil.doGet(url);
@@ -37,7 +49,10 @@ public class StockCodeName {
             e.printStackTrace();
         }
 	}
-
+	/**
+	 * get all shenzhen(not contain 300xxx) stock code and name
+	 * @return
+	 */
 	public Set<Map<String,String>> getStockSzName(){
 		long start = System.currentTimeMillis();
 		Set<Map<String,String>> set = new HashSet<>();
@@ -64,7 +79,10 @@ public class StockCodeName {
 		log.info("get sz stock spend time:"+(end-start)+"ms");
 		return set;
 	}
-	
+
+	/**
+	 * insert or update all stock code and name to database
+	 */
 	public void saveAllStocktoDB(){
 		
 		Set<Map<String, String>> shSet = getStockShName();

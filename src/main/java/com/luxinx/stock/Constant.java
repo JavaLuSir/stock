@@ -1,6 +1,6 @@
-package com.luxinx.snapapp;
+package com.luxinx.stock;
 /**
- * config info
+ * Config Info
  * @author Administrator
  *
  */

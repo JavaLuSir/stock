@@ -1,4 +1,4 @@
-package com.luxinx.snapapp;
+package com.luxinx.stock;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

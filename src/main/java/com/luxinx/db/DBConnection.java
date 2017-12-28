@@ -1,6 +1,6 @@
 package com.luxinx.db;
 
-import com.luxinx.snapapp.Constant;
+import com.luxinx.stock.Constant;
 
 import javax.naming.NamingException;
 import java.sql.*;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 /**
- * DataBase Access Class
+ * Basic DataBase Access Class
  * @author Administrator
  *
  */

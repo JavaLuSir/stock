@@ -1,4 +1,4 @@
-package com.luxinx.snapapp;
+package com.luxinx.stock;
 
 import com.luxinx.db.DBConnection;
 import com.luxinx.strategy.Strategy7DaysAvg;
@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * Crond Monitor and some Tasks
+ */
 public class CurrentDailyPrice {
 	
 	public static List<Map<String,String>> STOCK_CODE_FOCUS = new ArrayList<>();

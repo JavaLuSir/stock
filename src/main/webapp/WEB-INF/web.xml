@@ -11,7 +11,7 @@
     </welcome-file-list>
     <servlet>
         <servlet-name>init-config</servlet-name>
-        <servlet-class>com.luxinx.snapapp.InitConfig</servlet-class>
+        <servlet-class>com.luxinx.stock.InitConfig</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 </web-app>

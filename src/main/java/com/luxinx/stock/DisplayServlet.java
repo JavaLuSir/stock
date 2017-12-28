@@ -1,4 +1,4 @@
-package com.luxinx.snapapp;
+package com.luxinx.stock;
 
 import com.alibaba.fastjson.JSONObject;
 import com.luxinx.db.DBConnection;

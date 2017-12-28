@@ -1,4 +1,4 @@
-package com.luxinx.snapapp;
+package com.luxinx.stock;
 
 import com.luxinx.db.DBConnection;
 import com.luxinx.util.DateUtil;
@@ -13,20 +13,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Use to Deal Stock History Data infomation
+ */
 public class HistoryPrice {
 
 	public static Logger log = Logger.getLogger(HistoryPrice.class);
-	public List<Map<String,String>> getStockCode(){
+
+	/**
+	 * get all stock code and name from DB
+	 * @return
+	 */
+	public List<Map<String,String>> geAlltStockCode(){
 		String sql = "select stockid from tb_stock_name";
 		List<Map<String, String>> result = DBConnection.executeQuery(sql);
 		return result;
 	}
 	
 	public String getHistoryDailyPrice(){
-		List<Map<String, String>> listcode = getStockCode();
+		List<Map<String, String>> listcode = geAlltStockCode();
 		for(Map<String,String> map:listcode){
 			 String code = map.get("stockid");
-			 String precode = ""; 
+			 String precode;
 			 if(code.startsWith("6")){
 				 precode="sh";
 			 }else{
@@ -52,7 +60,7 @@ public class HistoryPrice {
 			year=DateUtil.getThisYear();
 		}
 		String result="";
-		String url ="";
+		String url;
 		try {
 			url = "http://data.gtimg.cn/flashdata/hushen/daily/"+year+"/"+precode+code+".js";
 			result = HttpUtil.doGet(url);

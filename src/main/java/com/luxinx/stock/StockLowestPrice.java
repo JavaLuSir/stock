@@ -1,4 +1,4 @@
-package com.luxinx.snapapp;
+package com.luxinx.stock;
 
 import com.luxinx.db.DBConnection;
 import com.luxinx.util.DateUtil;
