@@ -1,8 +1,6 @@
 package com.luxinx.db;
 
 import com.luxinx.stock.Constant;
-
-import javax.naming.NamingException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +15,7 @@ import java.util.Map;
  */
 public class DBConnection {
 	public static ThreadLocal<Connection> threadlocal = new ThreadLocal<>();
-	public static Connection getConnection() throws ClassNotFoundException, SQLException, NamingException{
+	public static Connection getConnection() throws ClassNotFoundException, SQLException{
 		Class.forName(Constant.DBDRIVER);
 		Connection	conn = DriverManager.getConnection(Constant.DBURL, Constant.DBUSER, Constant.DBPASSWORD);
 		conn.createStatement().executeQuery("select 1 from dual");
@@ -50,9 +48,7 @@ public class DBConnection {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}finally{
+		} finally{
 			try {
 				stmt.close();
 			} catch (SQLException e) {
@@ -68,7 +64,7 @@ public class DBConnection {
 		return result;
 	}
 	
-	public static int execute(String sql) throws ClassNotFoundException, SQLException, NamingException{
+	public static int execute(String sql) throws ClassNotFoundException, SQLException{
 		Connection conn = null;
 		Statement stmt = null;
 		int state = -1;

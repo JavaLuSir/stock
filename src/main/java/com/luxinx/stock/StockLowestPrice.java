@@ -38,7 +38,7 @@ public class StockLowestPrice {
 		try {
 			DBConnection.execute(sql);
 			log.info(sql);
-		} catch (ClassNotFoundException | SQLException | NamingException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			log.info("SQLException");
 		}
 		String lastyear = DateUtil.getYear(-1);
@@ -48,7 +48,7 @@ public class StockLowestPrice {
 		try {
 			DBConnection.execute(upavgsql);
 			log.info(upavgsql);
-		} catch (ClassNotFoundException | SQLException | NamingException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			log.info("SQLException");
 		}
 	

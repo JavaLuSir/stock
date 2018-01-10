@@ -2,6 +2,9 @@ package com.luxinx.stock;
 
 import com.alibaba.fastjson.JSONObject;
 import com.luxinx.db.DBConnection;
+import com.luxinx.db.IDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,10 +18,11 @@ import java.util.Map;
 /**
  * Display web price
  */
-@WebServlet("/display")
+@WebServlet("/displays")
 public class DisplayServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	@Autowired
+	public IDao dao;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -53,7 +57,7 @@ public class DisplayServlet extends HttpServlet {
 		}
 		
 		String sql = "select t.stockcode ,t.currprice/t.low cl,t.currprice ,t.avgprice ,n.stockname stockname FROM tb_stock_lowest t,tb_stock_name n where t.stockcode=n.stockid and t.currprice/t.low > 0 "+query+" ORDER BY t.currprice/t.low ASC  limit 0,200";
-		List<Map<String, String>> result = DBConnection.executeQuery(sql);
+		List<Map<String, Object>> result = dao.executeQuery(sql);//DBConnection.executeQuery(sql);
 		String strresult = JSONObject.toJSONString(result);
 		response.getWriter().println(strresult);
 
