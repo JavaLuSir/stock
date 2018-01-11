@@ -12,7 +12,7 @@ import java.util.Map;
 public class Strategy7DaysAvg {
 
 	private Logger log = Logger.getLogger(Strategy7DaysAvg.class);
-	public void setTradePrice() throws ClassNotFoundException, SQLException, NamingException{
+	public void setTradePrice() throws ClassNotFoundException, SQLException{
 		BigDecimal total = new BigDecimal(0);
 		String sql="select openprice from tb_stock_history where stockcode='000627' order by datestr desc  limit 7";
 		List<Map<String, String>> list = DBConnection.executeQuery(sql);

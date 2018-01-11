@@ -16,5 +16,9 @@
          <property name="dataSource"  ref="dataSource" />
      </bean>
     <!--  enable task annonation-->
-    <task:annotation-driven/>
+    <task:annotation-driven executor="executor" scheduler="scheduler"/>
+    <context:component-scan base-package="com.luxinx.task" />
+    <task:executor id="executor" pool-size="5"/>
+    <task:scheduler id="scheduler" pool-size="10"/>
+
 </beans>

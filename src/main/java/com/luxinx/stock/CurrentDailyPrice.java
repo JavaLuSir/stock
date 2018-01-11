@@ -64,8 +64,6 @@ public class CurrentDailyPrice {
 						e.printStackTrace();
 					} catch (SQLException e) {
 						e.printStackTrace();
-					} catch (NamingException e) {
-						e.printStackTrace();
 					}
 				}
 
@@ -201,14 +199,14 @@ public class CurrentDailyPrice {
 	 * @param message email notice message
 	 */
 	private void EmailNotice(Map<String, String> focus, String message) {
-		try {
+        try {
             MailUtil.sendMessage("javalusir@163.com", message);
             focus.put("issend", "1");
             log.info("Email send...");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-	}
+    }
 
 	/**
 	 * 判断是否是工作日

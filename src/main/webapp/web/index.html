@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta charset="UTF-8">
+<!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8">-->
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>stock</title>
@@ -55,14 +56,17 @@ var requestdata = function(){
 		url:'../display/price',
 		data:{'param':code},
 		type:'POST',
+		contentType: "application/json; charset=utf-8",
 		dataType:'json',
 		beforeSend:function(){
 			flag=false;
 		},
 		success:function(result){
+
 			$(".item").remove();
 			for(var i=0;i<result.length;i++){
-				parent.append("<tr class='item'><td>"+result[i].stockcode+"</td><td>"+result[i].stockname+"</td><td>"+result[i].currprice+"</td><td>"+result[i].avgprice+"</td><td>"+result[i].cl+"</td></tr>")
+                console.log(decodeURI(result[i].stockname));
+				parent.append("<tr class='item'><td>"+result[i].stockcode+"</td><td>"+decodeURI(result[i].stockname)+"</td><td>"+result[i].currprice+"</td><td>"+result[i].avgprice+"</td><td>"+result[i].cl+"</td></tr>")
 			}
 			flag=true;
 		},
