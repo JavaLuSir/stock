@@ -10,8 +10,17 @@ public class DailyMonitorTask {
 
     @Autowired
     private MonitorService monitorService;
-    @Scheduled(cron = "* * * 1-5 * ?")
-    public void monitorFocusPrice(){
+    @Scheduled(cron = "* 30-59 9 1-5 * ?")
+    public void monitorFocusPriceams(){
+        monitorService.monitorDailyPrice();
+    }
+
+    @Scheduled(cron = "* 0-30 11 1-5 * ?")
+    public void monitorFocusPriceamz(){
+        monitorService.monitorDailyPrice();
+    }
+    @Scheduled(cron = "* * 10,13-15 1-5 * ?")
+    public void monitorFocusPricepm(){
         monitorService.monitorDailyPrice();
     }
 }

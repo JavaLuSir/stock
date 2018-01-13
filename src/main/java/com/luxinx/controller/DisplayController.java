@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/display")
+@RequestMapping(value="display",produces = "application/json;charset=utf-8")
 public class DisplayController {
     @Autowired
     public DisplayService displayService;
     private static final Logger log =Logger.getLogger(DisplayController.class);
 
-    @RequestMapping(value="price",produces = "application/json;charset=utf-8")
+    @RequestMapping(value="price")
     @ResponseBody
     public String price(){
         List<Map<String, Object>> result = displayService.getYearAvgPrice("");
