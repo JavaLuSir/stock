@@ -22,7 +22,6 @@ public class DisplayController {
     @ResponseBody
     public String price(){
         List<Map<String, Object>> result = displayService.getYearAvgPrice("");
-        log.info(JSONObject.toJSONString(result));
         return JSONObject.toJSONString(result);
     }
 }
