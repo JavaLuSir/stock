@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class MailUtil {
 
-	public static void sendMessage(String athost,String message) throws AddressException, MessagingException{
+	public static void sendMessage(String athost,String message) throws  MessagingException{
 
         Properties props = new Properties();  
         // 开启debug调试  

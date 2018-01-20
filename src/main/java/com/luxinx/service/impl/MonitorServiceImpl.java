@@ -5,7 +5,6 @@ import com.luxinx.service.MonitorService;
 import com.luxinx.task.Stock;
 import com.luxinx.util.HttpUtil;
 import com.luxinx.util.MailUtil;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,9 +77,7 @@ public class MonitorServiceImpl implements MonitorService {
                     }
                     long ed = System.currentTimeMillis();
                     log.info((ed-st)+"ms");
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                }  catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -98,11 +95,11 @@ public class MonitorServiceImpl implements MonitorService {
     private void EmailNotice(Map<String, Object> focus, String message) {
         try {
             MailUtil.sendMessage("javalusir@163.com", message);
-            focus.put("issend", "1");
-            log.info("Email send...");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+        focus.put("issend", "1");
+            log.info("Email send...");
     }
 
 

@@ -11,6 +11,7 @@ public class StockLowestPrice {
 
 	Logger log = Logger.getLogger(StockLowestPrice.class);
 	public void updateLowestAndAvg(){
+
 		String insert = "INSERT INTO tb_stock_lowest(low,stockcode) SELECT min(lowprice),stockcode FROM tb_stock_history GROUP BY stockcode";
 		try {
 			DBConnection.execute(insert);

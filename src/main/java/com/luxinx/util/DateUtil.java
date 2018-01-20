@@ -30,13 +30,11 @@ public class DateUtil {
 	
 	
 	public static String getThisYear(){
-		int  thisyear  = new Date().getYear();
-		 String stryear =  thisyear +"";
-		 String strduo = stryear.substring(1);
-		return strduo;
+		return getYear(0);
 	}
 	
 	public static String getYear(int yeardeviation){
+
 		int  thisyear  = new Date().getYear();
 		String deviation = (thisyear+yeardeviation)+"";
 		 String strduo = deviation.substring(1);
