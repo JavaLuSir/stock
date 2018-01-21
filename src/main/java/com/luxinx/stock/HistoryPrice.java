@@ -1,10 +1,11 @@
 package com.luxinx.stock;
 
-import com.luxinx.db.DBConnection;
+import com.luxinx.db.IDao;
 import com.luxinx.util.DateUtil;
 import com.luxinx.util.HttpUtil;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.naming.NamingException;
 import java.io.IOException;
@@ -18,22 +19,24 @@ import java.util.UUID;
  */
 public class HistoryPrice {
 
-	public static Logger log = Logger.getLogger(HistoryPrice.class);
+	private static Logger log = Logger.getLogger(HistoryPrice.class);
 
+	@Autowired
+	private IDao dao;
 	/**
 	 * get all stock code and name from DB
-	 * @return
+	 * @return return listmap
 	 */
-	public List<Map<String,String>> geAlltStockCode(){
+	private List<Map<String, Object>> geAlltStockCode(){
 		String sql = "select stockid from tb_stock_name";
-		List<Map<String, String>> result = DBConnection.executeQuery(sql);
-		return result;
+
+		return dao.executeQuery(sql);
 	}
 	
 	public String getHistoryDailyPrice(){
-		List<Map<String, String>> listcode = geAlltStockCode();
-		for(Map<String,String> map:listcode){
-			 String code = map.get("stockid");
+		List<Map<String, Object>> listcode = geAlltStockCode();
+		for(Map<String,Object> map:listcode){
+			 String code = map.get("stockid")+"";
 			 String precode;
 			 if(code.startsWith("6")){
 				 precode="sh";
@@ -55,7 +58,7 @@ public class HistoryPrice {
 		requestHistoryAndSave(code, precode, DateUtil.getThisYear());
 	}
 
-	public static void requestHistoryAndSave(String code, String precode, String year) {
+	private void requestHistoryAndSave(String code, String precode, String year) {
 		if(year==null||"".equals(year)){
 			year=DateUtil.getThisYear();
 		}
@@ -84,16 +87,12 @@ public class HistoryPrice {
 		    	String sql ="insert into tb_stock_history values('"+id+"','"+code+"','"+openprice+"','"+closeprice+"','"+highprice+"','"+lowprice+"','"+volumn+"','"+datestr+"')";
 		    	log.info(sql);
 		    	try {
-					DBConnection.execute(sql);
+		    		dao.execute(sql);
 				}catch(Exception e){
 					log.error("SQLException...");
 				}
 		 }
 		}
 	}
-	
-	public static void main(String[] args) throws ClientProtocolException, IOException, ClassNotFoundException, SQLException, NamingException {
-	//	new HistoryPrice().getHistoryPriceByCode();
-	//	System.out.println(new HistoryPrice().getThisYear());
-	}
+
 }

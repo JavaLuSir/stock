@@ -1,25 +1,31 @@
 package com.luxinx.stock;
 
-import com.luxinx.db.DBConnection;
+import com.luxinx.db.IDao;
 import com.luxinx.util.DateUtil;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
-import javax.naming.NamingException;
 import java.sql.SQLException;
 
+@Component
 public class StockLowestPrice {
 
-	Logger log = Logger.getLogger(StockLowestPrice.class);
+	private Logger log = Logger.getLogger(StockLowestPrice.class);
+
+	@Autowired
+	private IDao dao;
 	public void updateLowestAndAvg(){
 
 		String insert = "INSERT INTO tb_stock_lowest(low,stockcode) SELECT min(lowprice),stockcode FROM tb_stock_history GROUP BY stockcode";
 		try {
-			DBConnection.execute(insert);
+			dao.execute(insert);
 			log.info(insert);
 		} catch (Exception e) {
 			String updatsql="UPDATE tb_stock_lowest tbl INNER JOIN (SELECT min(lowprice) low,stockcode FROM tb_stock_history GROUP BY stockcode) tbm ON tbl.stockcode=tbm.stockcode SET tbl.low=tbm.low";
 			try {
-				DBConnection.execute(updatsql);
+				dao.execute(updatsql);
 				log.info(updatsql);
 			} catch (Exception e1) {
 				log.error("SQLUpdate Exception...");
@@ -37,19 +43,16 @@ public class StockLowestPrice {
 		String strtoday = DateUtil.getCurrentStr("yyMMdd");
 		String sql = "UPDATE tb_stock_lowest t,(SELECT s.stockcode,s.closeprice FROM tb_stock_history s WHERE datestr='"+strtoday+"') s set t.currprice=s.closeprice WHERE t.stockcode=s.stockcode";
 		try {
-			DBConnection.execute(sql);
+
+			dao.execute(sql);
 			log.info(sql);
-		} catch (ClassNotFoundException | SQLException e) {
-			log.info("SQLException");
-		}
-		String lastyear = DateUtil.getYear(-1);
-		String strlast = lastyear + strtoday.substring(2);
-		String upavgsql = "UPDATE tb_stock_lowest t,(SELECT AVG(ss.closeprice) as avgprice,stockcode FROM tb_stock_history ss where datestr>'"+strlast+"' group BY stockcode) s set t.avgprice=s.avgprice WHERE t.stockcode=s.stockcode ";
-		
-		try {
-			DBConnection.execute(upavgsql);
+			String lastyear = DateUtil.getYear(-1);
+			String strlast = lastyear + strtoday.substring(2);
+			String upavgsql = "UPDATE tb_stock_lowest t,(SELECT AVG(ss.closeprice) as avgprice,stockcode FROM tb_stock_history ss where datestr>'"+strlast+"' group BY stockcode) s set t.avgprice=s.avgprice WHERE t.stockcode=s.stockcode ";
+			dao.execute(upavgsql);
 			log.info(upavgsql);
-		} catch (ClassNotFoundException | SQLException e) {
+
+		} catch (Exception e) {
 			log.info("SQLException");
 		}
 	

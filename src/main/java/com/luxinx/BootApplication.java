@@ -8,6 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"com.luxinx.service.impl","com.luxinx.db","com.luxinx.controller","com.luxinx.task"})
 public class BootApplication {
     public static void main(String[] args){
-        SpringApplication.run(BootApplication.class);
+        SpringApplication.run(BootApplication.class,args);
     }
 }
