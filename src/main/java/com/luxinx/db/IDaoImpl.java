@@ -10,11 +10,14 @@ import java.util.Map;
 @Component
 public class IDaoImpl implements IDao{
 
-    private JdbcTemplate jdbcTemplateObject;
+    private final JdbcTemplate jdbcTemplateObject;
     @Autowired
-    public void setDataSource(JdbcTemplate jdbcTemplateObject) {
+    public IDaoImpl(JdbcTemplate jdbcTemplateObject) {
         this.jdbcTemplateObject = jdbcTemplateObject;
     }
+
+
+
 
     @Override
     public List<Map<String, Object>> executeQuery(String sql) {
