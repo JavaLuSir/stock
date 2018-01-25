@@ -1,6 +1,5 @@
 package com.luxinx.task;
 
-import com.luxinx.controller.DisplayController;
 import com.luxinx.stock.HistoryPrice;
 import com.luxinx.stock.StockCodeName;
 import com.luxinx.stock.StockLowestPrice;
