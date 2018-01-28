@@ -4,9 +4,8 @@ import com.luxinx.db.IDao;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.naming.NamingException;
 import java.math.BigDecimal;
-import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Map;
 

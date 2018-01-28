@@ -15,81 +15,80 @@ import java.util.Map;
 
 @Service
 public class MonitorServiceImpl implements MonitorService {
-    private static final Logger log =Logger.getLogger(MonitorServiceImpl.class);
+    private static final Logger log = Logger.getLogger(MonitorServiceImpl.class);
     @Autowired
     public IDao dao;
+
     @Override
     public void monitorDailyPrice() {
-        {
-            log.info("============================start===================================");
-            if(Stock.STOCK_CODE_FOCUS.isEmpty()){
-                String sql = "select stockcode,stockname,destprice,updown,issend from tb_stock_focus";
-                Stock.STOCK_CODE_FOCUS = dao.executeQuery(sql);
+        log.info("============================start===================================");
+        if (Stock.STOCK_CODE_FOCUS.isEmpty()) {
+            String sql = "select stockcode,stockname,destprice,updown,issend from tb_stock_focus";
+            Stock.STOCK_CODE_FOCUS = dao.executeQuery(sql);
+        }
+        for (Map<String, Object> focus : Stock.STOCK_CODE_FOCUS) {
+            String code = focus.get("stockcode") + "";
+            String precode;
+            if (code.startsWith("0") || code.startsWith("3")) {
+                precode = "sz";
+            } else if (code.startsWith("6")) {
+                precode = "sh";
+            } else {
+                precode = "";
             }
-            for(Map<String,Object> focus:Stock.STOCK_CODE_FOCUS){
-                String code=focus.get("stockcode")+"";
-                String precode = "";
-                if(code.startsWith("0")||code.startsWith("3")){
-                    precode="sz";
-                }else if(code.startsWith("6")){
-                    precode="sh";
-                }else{
-                    precode="";
-                }
-                try {
-                    long st = System.currentTimeMillis();
-                    String current= HttpUtil.doGet("http://hq.sinajs.cn/list="+precode+code);
-                    String[] cuuarry = current.split(",");
+            try {
+                long st = System.currentTimeMillis();
+                String current = HttpUtil.doGet("http://hq.sinajs.cn/list=" + precode + code);
+                String[] cuuarry = current.split(",");
 				/*Map<String,String> daymp = new HashMap<>();
 				daymp.put("id", code);
 				daymp.put("o", cuuarry[1]);//今开
 				daymp.put("c", cuuarry[2]);//昨收
 				daymp.put("dq", cuuarry[3]);//当前
 				daymp.put("d", cuuarry[30]+" "+cuuarry[31]);//日期*/
-                    double destprice = 0.0;
-                    if(focus.get("destprice")!=null&&!"".equals(focus.get("destprice"))){
-                        destprice=Double.parseDouble(focus.get("destprice")+"");
-                    }
-                    double currprice = 0.0;
-                    String strcurrprice = "";
-                    if(cuuarry.length>3){
-                        strcurrprice=cuuarry[3];
-                    }
-                    if(strcurrprice!=null&&!"".equals(strcurrprice)){
-                        currprice=Double.parseDouble(strcurrprice);
-                    }
-                    double detaprice = currprice-destprice;
-                    String updown=focus.get("updown")+"";
-                    String issend = focus.get("issend")+"";
-                    if("0".equals(issend)){
-                        if("-1".equals(updown)){
-                            if(detaprice<0){
-                                String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经跌破");
-                                EmailNotice(focus, message);
-                            }
-                        }
-                        if("1".equals(updown)){
-                            if(detaprice>0){
-                                String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经涨过");
-                                EmailNotice(focus, message);
-                            }
-                        }
-                    }
-                    long ed = System.currentTimeMillis();
-                    log.info((ed-st)+"ms");
-                }  catch (IOException e) {
-                    e.printStackTrace();
+                double destprice = 0.0;
+                if (focus.get("destprice") != null && !"".equals(focus.get("destprice"))) {
+                    destprice = Double.parseDouble(focus.get("destprice") + "");
                 }
+                double currprice = 0.0;
+                String strcurrprice = "";
+                if (cuuarry.length > 3) {
+                    strcurrprice = cuuarry[3];
+                }
+                if (strcurrprice != null && !"".equals(strcurrprice)) {
+                    currprice = Double.parseDouble(strcurrprice);
+                }
+                double detaprice = currprice - destprice;
+                String updown = focus.get("updown") + "";
+                String issend = focus.get("issend") + "";
+                if ("0".equals(issend)) {
+                    if ("-1".equals(updown)) {
+                        if (detaprice < 0) {
+                            String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经跌破");
+                            EmailNotice(focus, message);
+                        }
+                    }
+                    if ("1".equals(updown)) {
+                        if (detaprice > 0) {
+                            String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经涨过");
+                            EmailNotice(focus, message);
+                        }
+                    }
+                }
+                long ed = System.currentTimeMillis();
+                log.info((ed - st) + "ms");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            log.info("============================end===================================");
-
         }
+        log.info("============================end===================================");
 
     }
 
     /**
      * Send Email
-     * @param focus the stock of focus
+     *
+     * @param focus   the stock of focus
      * @param message email notice message
      */
     private void EmailNotice(Map<String, Object> focus, String message) {
@@ -99,12 +98,13 @@ public class MonitorServiceImpl implements MonitorService {
             e.printStackTrace();
         }
         focus.put("issend", "1");
-            log.info("Email send...");
+        log.info("Email send...");
     }
 
 
     /**
      * get stock Percent
+     *
      * @param focus
      * @param destprice
      * @param currprice
@@ -113,8 +113,8 @@ public class MonitorServiceImpl implements MonitorService {
      * @return
      */
     private String getPrecentStr(Map<String, Object> focus, double destprice, double currprice, double detaprice, String s) {
-        String stockcode = focus.get("stockcode")+"";
-        String stockname = focus.get("stockname")+"";
+        String stockcode = focus.get("stockcode") + "";
+        String stockname = focus.get("stockname") + "";
         String strprecent = ((detaprice / destprice) * 100) + "";
         if (strprecent.length() > 4) {
             strprecent = strprecent.substring(0, 4);

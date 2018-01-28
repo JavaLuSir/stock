@@ -43,6 +43,6 @@ public class JobTask {
 
     @Scheduled(cron = "0 0 23 * * 1-5")
     public void setStrategyPrice() {
-        new Strategy7DaysAvg().setTradePrice();//现在只设置天茂的价格
+      //  new Strategy7DaysAvg().setTradePrice();//现在只设置天茂的价格
     }
 }

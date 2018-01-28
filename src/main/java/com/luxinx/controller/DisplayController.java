@@ -2,6 +2,8 @@ package com.luxinx.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.luxinx.service.DisplayService;
+import com.luxinx.stock.HistoryPrice;
+import com.luxinx.stock.StockCodeName;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,5 +25,17 @@ public class DisplayController {
     public String price(){
         List<Map<String, Object>> result = displayService.getYearAvgPrice("");
         return JSONObject.toJSONString(result);
+    }
+    @RequestMapping(value="stockname")
+    @ResponseBody
+    public String stockname(){
+        List<Map<String, Object>> result = displayService.getYearAvgPrice("");
+        return JSONObject.toJSONString(result);
+    }
+    @RequestMapping(value="history")
+    @ResponseBody
+    public String history(){
+        new HistoryPrice().getHistoryDailyPrice();
+        return "get all stock";
     }
 }
