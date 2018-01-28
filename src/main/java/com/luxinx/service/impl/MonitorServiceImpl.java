@@ -5,23 +5,28 @@ import com.luxinx.service.MonitorService;
 import com.luxinx.task.Stock;
 import com.luxinx.util.HttpUtil;
 import com.luxinx.util.MailUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class MonitorServiceImpl implements MonitorService {
-    private static final Logger log = Logger.getLogger(MonitorServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MonitorServiceImpl.class);
     @Autowired
     public IDao dao;
 
     @Override
     public void monitorDailyPrice() {
-        log.info("============================start===================================");
+        logger.info("============================start===================================");
         if (Stock.STOCK_CODE_FOCUS.isEmpty()) {
             String sql = "select stockcode,stockname,destprice,updown,issend from tb_stock_focus";
             Stock.STOCK_CODE_FOCUS = dao.executeQuery(sql);
@@ -76,13 +81,37 @@ public class MonitorServiceImpl implements MonitorService {
                     }
                 }
                 long ed = System.currentTimeMillis();
-                log.info((ed - st) + "ms");
+                logger.info((ed - st) + "ms");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        log.info("============================end===================================");
+        logger.info("============================end===================================");
 
+    }
+
+    @Override
+    public Map<String,String> choiceGoodStock(String code) {
+            String sql25avg = "select closeprice,vol from tb_stock_history where stockcode='"+code+"' order by datestr DESC limit 25";
+            List<Map<String, Object>> listprice = dao.executeQuery(sql25avg);
+            double vollast = Double.parseDouble(listprice.get(0).get("vol") + "");
+            double volbeforelast = Double.parseDouble(listprice.get(1).get("vol") + "");
+            double trend = (vollast/volbeforelast);
+            final BigDecimal[] total = {new BigDecimal(0)};
+            total[0].setScale(2);
+            listprice.forEach((Map<String, Object> e) ->{
+                logger.info(e.get("closeprice")+"");
+                total[0] = total[0].add(new BigDecimal(e.get("closeprice")+""));
+            });
+            logger.info("25avgPrice: "+ total[0].divide(new BigDecimal(listprice.size())));
+
+            Map<String,String > result = new HashMap<>();
+            //判断成交量比前一日放量才获取25日均线
+            if(trend>0){
+                //获取一只股票25日平均值
+                result.put(code,total[0].divide(new BigDecimal(listprice.size())).doubleValue()+"");
+            }
+            return result;
     }
 
     /**
@@ -98,7 +127,7 @@ public class MonitorServiceImpl implements MonitorService {
             e.printStackTrace();
         }
         focus.put("issend", "1");
-        log.info("Email send...");
+        logger.info("Email send...");
     }
 
 
