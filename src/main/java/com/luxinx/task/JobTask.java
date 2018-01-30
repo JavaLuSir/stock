@@ -1,13 +1,20 @@
 package com.luxinx.task;
 
+import com.luxinx.db.IDao;
+import com.luxinx.service.MonitorService;
 import com.luxinx.stock.HistoryPrice;
 import com.luxinx.stock.StockCodeName;
 import com.luxinx.stock.StockLowestPrice;
 import com.luxinx.strategy.Strategy7DaysAvg;
+import com.sun.mail.imap.protocol.ID;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -23,7 +30,14 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 public class JobTask {
 
+
     private static final Logger log = Logger.getLogger(JobTask.class);
+
+    @Autowired
+    private MonitorService monitorService;
+
+    @Autowired
+    private IDao dao;
 
     @Scheduled(cron = "0 10 0 * * 1-5")
     public void saveStockToDB() {
@@ -41,8 +55,12 @@ public class JobTask {
        new HistoryPrice().getHistoryDailyPrice();
     }
 
-    @Scheduled(cron = "0 0 23 * * 1-5")
+    @Scheduled(cron = "0 30 21 * * 1-7")
     public void setStrategyPrice() {
+        List<Map<String, Object>> list = dao.executeQuery("select * from tb_stock_name");
+        list.forEach((Map<String,Object> e)->{
+            monitorService.choiceGoodStock(e.get("stockid") + "");
+        });
       //  new Strategy7DaysAvg().setTradePrice();//现在只设置天茂的价格
     }
 }
