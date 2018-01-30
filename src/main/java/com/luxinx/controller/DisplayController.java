@@ -18,6 +18,9 @@ import java.util.Map;
 public class DisplayController {
     @Autowired
     public DisplayService displayService;
+
+    @Autowired
+    public HistoryPrice historyPrice;
     private static final Logger log =Logger.getLogger(DisplayController.class);
 
     @RequestMapping(value="price")
@@ -35,7 +38,9 @@ public class DisplayController {
     @RequestMapping(value="history")
     @ResponseBody
     public String history(){
-        new HistoryPrice().getHistoryDailyPrice();
+        for (int i=10;i<19;i++){
+            historyPrice.getHistoryDailyPrice(i);
+        }
         return "get all stock";
     }
 }

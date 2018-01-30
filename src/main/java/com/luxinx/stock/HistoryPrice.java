@@ -3,13 +3,11 @@ package com.luxinx.stock;
 import com.luxinx.db.IDao;
 import com.luxinx.util.DateUtil;
 import com.luxinx.util.HttpUtil;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.naming.NamingException;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -17,9 +15,10 @@ import java.util.UUID;
 /**
  * Use to Deal Stock History Data infomation
  */
+@Component
 public class HistoryPrice {
 
-	private static Logger log = Logger.getLogger(HistoryPrice.class);
+	private static Logger log = LoggerFactory.getLogger(HistoryPrice.class);
 
 	@Autowired
 	private IDao dao;
@@ -34,21 +33,27 @@ public class HistoryPrice {
 	}
 	
 	public String getHistoryDailyPrice(){
+		getHistoryDailyPrice(Integer.parseInt(DateUtil.getThisYear()));
+		log.info("All history get successed!");
+		return "";
+	}
+
+	public String getHistoryDailyPrice(int year){
 		List<Map<String, Object>> listcode = geAlltStockCode();
 		for(Map<String,Object> map:listcode){
-			 String code = map.get("stockid")+"";
-			 String precode;
-			 if(code.startsWith("6")){
-				 precode="sh";
-			 }else{
-				 precode="sz";
-			 }
-			 if("000001".equals(code)){
-				 String shprecode="sh";
-				 getYearHistory(code, shprecode);
-			 }
-			 getYearHistory(code, precode);
-			
+			String code = map.get("stockid")+"";
+			String precode;
+			if(code.startsWith("6")){
+				precode="sh";
+			}else{
+				precode="sz";
+			}
+			if("000001".equals(code)){
+				String shprecode="sh";
+				requestHistoryAndSave(code, shprecode,year+"");
+			}
+			requestHistoryAndSave(code, precode,year+"");
+
 		}
 		log.info("All history get successed!");
 		return "";

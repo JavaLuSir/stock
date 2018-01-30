@@ -2,17 +2,15 @@ package com.luxinx.stock;
 
 import com.luxinx.db.IDao;
 import com.luxinx.util.DateUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
-import java.sql.SQLException;
 
 @Component
 public class StockLowestPrice {
 
-	private Logger log = Logger.getLogger(StockLowestPrice.class);
+	private Logger log = LoggerFactory.getLogger(StockLowestPrice.class);
 
 	@Autowired
 	private IDao dao;

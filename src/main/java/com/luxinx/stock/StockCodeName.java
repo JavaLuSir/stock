@@ -2,8 +2,11 @@ package com.luxinx.stock;
 
 import com.luxinx.db.IDao;
 import com.luxinx.util.HttpUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,9 +16,10 @@ import java.util.Set;
 /**
  * get stock info from http://hq.sinajs.cn/list=sh + code
  */
+@Component
 public class StockCodeName {
 
-    private Logger log = Logger.getLogger(StockCodeName.class);
+    private static final Logger log = LoggerFactory.getLogger(StockCodeName.class);
 
     @Autowired
     private IDao dao;

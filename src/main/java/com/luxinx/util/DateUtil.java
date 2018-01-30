@@ -41,7 +41,7 @@ public class DateUtil {
 		return strduo;
 	}
 	public static void main(String[] args) {
-		System.out.println(DateUtil.getYear(-1));
+		System.out.println(DateUtil.getYear(0));
 	}
 	
 }
