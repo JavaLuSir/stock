@@ -55,7 +55,7 @@ public class HistoryPrice {
 			requestHistoryAndSave(code, precode,year+"");
 
 		}
-		log.info("All history get successed!");
+		log.info(year+" All history get successed!");
 		return "";
 	}
 	
