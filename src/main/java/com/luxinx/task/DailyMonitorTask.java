@@ -13,8 +13,7 @@ public class DailyMonitorTask {
     @Autowired
     private MonitorService monitorService;
 
-    //@Scheduled(cron = "* 30-59 9 * * 1-5")
-    @Scheduled(cron = "* * * * * 1-5")
+    @Scheduled(cron = "* 30-59 9 * * 1-5")
     public void monitorFocusPriceams() {
         log.info("[monitorFocusPriceams]");
         monitorService.monitorDailyPrice();

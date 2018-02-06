@@ -67,6 +67,6 @@ public class DisplayController {
         t.start();
 
 
-        return "get all stock";
+        return "get stock start";
     }
 }
