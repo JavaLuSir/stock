@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This Controller is use to display some price,face and so on.
+ */
 @Controller
 @RequestMapping(value="display",produces = "application/json;charset=utf-8")
 public class DisplayController {
@@ -32,6 +35,7 @@ public class DisplayController {
         List<Map<String, Object>> result = displayService.getYearAvgPrice("");
         return JSONObject.toJSONString(result);
     }
+
     @RequestMapping(value="stockname")
     @ResponseBody
     public String stockname(){
@@ -39,6 +43,7 @@ public class DisplayController {
         List<Map<String, Object>> result = displayService.getYearAvgPrice("");
         return JSONObject.toJSONString(result);
     }
+
     @RequestMapping(value="history")
     @ResponseBody
     public String history(@RequestParam String year){
