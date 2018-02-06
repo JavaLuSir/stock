@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -40,12 +41,11 @@ public class DisplayController {
     }
     @RequestMapping(value="history")
     @ResponseBody
-    public String history(){
+    public String history(@RequestParam String year){
+        int intyear = Integer.parseInt(year);
         log.info("[history]");
         Thread t = new Thread(()->{
-            for (int i=10;i<19;i++){
-                historyPrice.getHistoryDailyPrice(i);
-            }
+        historyPrice.getHistoryDailyPrice(intyear);
         });
         t.start();
 
