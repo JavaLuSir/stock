@@ -55,9 +55,9 @@ public class JobTask {
         stockLowestPrice.updateLowestAndAvg();
     }
 
-    @Scheduled(cron = "* * * * * 1-5")
+    @Scheduled(cron = "0 0 20 * * 1-5")
     public void historyDailyPrice() {
-       //Stock.STOCK_CODE_FOCUS.clear();
+       Stock.STOCK_CODE_FOCUS.clear();
         log.info("[getHistoryDailyPrice]");
         historyPrice.getHistoryDailyPrice();
     }

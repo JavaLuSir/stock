@@ -18,7 +18,7 @@ import java.util.Map;
  * This Controller is use to display some price,face and so on.
  */
 @Controller
-@RequestMapping(value="display",produces = "application/json;charset=utf-8")
+@RequestMapping(value = "display", produces = "application/json;charset=utf-8")
 public class DisplayController {
 
     @Autowired
@@ -26,31 +26,43 @@ public class DisplayController {
 
     @Autowired
     public HistoryPrice historyPrice;
-    private static final Logger log =LoggerFactory.getLogger(DisplayController.class);
 
-    @RequestMapping(value="price")
+
+    private static final Logger log = LoggerFactory.getLogger(DisplayController.class);
+
+    /**
+     * show day of 250 average price.
+     *
+     * @return
+     */
+    @RequestMapping(value = "price")
     @ResponseBody
-    public String price(){
+    public String price() {
         log.info("[price]");
         List<Map<String, Object>> result = displayService.getYearAvgPrice("");
         return JSONObject.toJSONString(result);
     }
 
-    @RequestMapping(value="stockname")
+    @RequestMapping(value = "stockname")
     @ResponseBody
-    public String stockname(){
+    public String stockname() {
         log.info("[stockname]");
         List<Map<String, Object>> result = displayService.getYearAvgPrice("");
         return JSONObject.toJSONString(result);
     }
 
-    @RequestMapping(value="history")
+    /**
+     * get year data need a param year from 10-this year.
+     * @param year example 10\11\12... and so on.
+     * @return
+     */
+    @RequestMapping(value = "history")
     @ResponseBody
-    public String history(@RequestParam String year){
+    public String history(@RequestParam String year) {
         int intyear = Integer.parseInt(year);
         log.info("[history]");
-        Thread t = new Thread(()->{
-        historyPrice.getHistoryDailyPrice(intyear);
+        Thread t = new Thread(() -> {
+            historyPrice.getHistoryDailyPrice(intyear);
         });
         t.start();
 
