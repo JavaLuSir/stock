@@ -1,11 +1,13 @@
 package com.luxinx.service;
 
-import java.util.Map;
-
+/**
+ * use to monitor stock price
+ */
 public interface MonitorService {
+
 
     void monitorDailyPrice();
 
-    Map<String,String> choiceGoodStock(String code);
+
 
 }

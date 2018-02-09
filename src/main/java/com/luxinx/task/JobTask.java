@@ -2,6 +2,7 @@ package com.luxinx.task;
 
 import com.luxinx.db.IDao;
 import com.luxinx.service.MonitorService;
+import com.luxinx.service.StrategyService;
 import com.luxinx.stock.HistoryPrice;
 import com.luxinx.stock.StockCodeName;
 import com.luxinx.stock.StockLowestPrice;
@@ -31,7 +32,7 @@ public class JobTask {
     private static final Logger log = LoggerFactory.getLogger(JobTask.class);
 
     @Autowired
-    private MonitorService monitorService;
+    private StrategyService strategyService;
 
     @Autowired
     private StockCodeName stockCodeName;
@@ -67,8 +68,7 @@ public class JobTask {
         log.info("[setStrategyPrice]");
         List<Map<String, Object>> list = dao.executeQuery("select * from tb_stock_name");
         list.forEach((Map<String,Object> e)->{
-            monitorService.choiceGoodStock(e.get("stockid") + "");
+            strategyService.choice25avgStock(e.get("stockid") + "");
         });
-      //  new Strategy7DaysAvg().setTradePrice();//现在只设置天茂的价格
     }
 }

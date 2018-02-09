@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This Controller is use to display some price,face and so on.
+ * 用于页面显示股票价格的接口
  */
 @Controller
 @RequestMapping(value = "display", produces = "application/json;charset=utf-8")
@@ -31,7 +31,7 @@ public class DisplayController {
     private static final Logger log = LoggerFactory.getLogger(DisplayController.class);
 
     /**
-     * show day of 250 average price.
+     * 获取250日均线
      *
      * @return
      */
@@ -70,3 +70,4 @@ public class DisplayController {
         return "get stock start";
     }
 }
+
