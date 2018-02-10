@@ -25,7 +25,7 @@ public class IDaoImpl implements IDao {
     }
 
     @Override
-    public List<Map<String, Object>> executeQeuery(String sql, Map<String, Object> param) {
+    public List<Map<String, Object>> executeQuery(String sql, Map<String, Object> param) {
         return null;
     }
 

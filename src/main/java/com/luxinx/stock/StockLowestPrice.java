@@ -38,7 +38,7 @@ public class StockLowestPrice {
 			log.info("SQLException");
 		}*/
 		
-		String strtoday = DateUtil.getCurrentStr("yyMMdd");
+		String strtoday = DateUtil.getCurrentDateStr("yyMMdd");
 		String sql = "UPDATE tb_stock_lowest t,(SELECT s.stockcode,s.closeprice FROM tb_stock_history s WHERE datestr='"+strtoday+"') s set t.currprice=s.closeprice WHERE t.stockcode=s.stockcode";
 		try {
 

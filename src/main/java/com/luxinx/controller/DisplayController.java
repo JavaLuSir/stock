@@ -1,6 +1,7 @@
 package com.luxinx.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.luxinx.service.BasicDataService;
 import com.luxinx.service.DisplayService;
 import com.luxinx.stock.HistoryPrice;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,8 @@ public class DisplayController {
     @Autowired
     public HistoryPrice historyPrice;
 
+    @Autowired
+    public BasicDataService basicDataService;
 
     private static final Logger log = LoggerFactory.getLogger(DisplayController.class);
 
@@ -43,13 +47,16 @@ public class DisplayController {
         return JSONObject.toJSONString(result);
     }
 
-    @RequestMapping(value = "stockname")
+    @RequestMapping(value="dayprice")
     @ResponseBody
-    public String stockname() {
-        log.info("[stockname]");
-        List<Map<String, Object>> result = displayService.getYearAvgPrice("");
-        return JSONObject.toJSONString(result);
+    public String dayprice(@RequestParam(required = true) String code,@RequestParam(required = true) String days){
+        log.info("[dayprice]");
+        Integer.parseInt(days);
+        BigDecimal avgprice = basicDataService.getDayAvgPrice(code, Integer.parseInt(days));
+
+        return avgprice.toString();
     }
+
 
     /**
      * get year data need a param year from 10-this year.

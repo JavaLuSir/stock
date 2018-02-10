@@ -7,7 +7,7 @@ public interface IDao {
 
    List<Map<String,Object>> executeQuery(String sql);
 
-   List<Map<String,Object>>  executeQeuery(String sql,Map<String,Object> param);
+   List<Map<String,Object>>  executeQuery(String sql,Map<String,Object> param);
 
    void execute(String sql);
 

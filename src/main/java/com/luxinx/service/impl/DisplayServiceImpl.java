@@ -1,6 +1,7 @@
 package com.luxinx.service.impl;
 
 import com.luxinx.db.IDao;
+import com.luxinx.service.BasicDataService;
 import com.luxinx.service.DisplayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +18,13 @@ public class DisplayServiceImpl implements DisplayService {
 
     @Autowired
     public IDao dao;
+
+    @Autowired
+    public BasicDataService basicDataService;
+
     @Override
     public List<Map<String, Object>> getYearAvgPrice(String stockparam) {
+
         String query = "";
         if(stockparam!=null&&!"".equals(stockparam)){
             if(stockparam.startsWith("0")||stockparam.startsWith("6")){
