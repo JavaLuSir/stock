@@ -100,7 +100,7 @@ public class MonitorServiceImpl implements MonitorService {
             e.printStackTrace();
         }
         focus.put("issend", "1");
-        String updatesql = "update tb_stock_focus set issend='1' where stockcode=" + focus.get("stockcode");
+        String updatesql = "update tb_stock_focus set issend='1' where stockcode='" + focus.get("stockcode")+"'";
         dao.execute(updatesql);
         logger.info("Email send...");
     }

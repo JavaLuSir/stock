@@ -9,4 +9,5 @@ public class Stock {
     public static List<Map<String,Object>> STOCK_CODE_FOCUS = new CopyOnWriteArrayList<>();
 
     public static List<Map<String,Object>> STOCK_CODE_ALL = new CopyOnWriteArrayList<>();
+
 }

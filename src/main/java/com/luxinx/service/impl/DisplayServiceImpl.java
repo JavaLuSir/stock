@@ -28,6 +28,7 @@ public class DisplayServiceImpl implements DisplayService {
             }
         }
 
+
         String sql = "select t.stockcode ,t.currprice/t.low cl,t.currprice ,t.avgprice ,n.stockname stockname FROM tb_stock_lowest t,tb_stock_name n where t.stockcode=n.stockid and t.currprice/t.low > 0 "+query+" ORDER BY t.currprice/t.low ASC  limit 0,200";
         logger.info(sql);
         return dao.executeQuery(sql);

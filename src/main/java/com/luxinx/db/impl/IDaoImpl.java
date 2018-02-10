@@ -1,5 +1,6 @@
-package com.luxinx.db;
+package com.luxinx.db.impl;
 
+import com.luxinx.db.IDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class IDaoImpl implements IDao{
+public class IDaoImpl implements IDao {
 
     private final JdbcTemplate jdbcTemplateObject;
     @Autowired

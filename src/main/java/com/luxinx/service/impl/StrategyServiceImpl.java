@@ -41,6 +41,7 @@ public class StrategyServiceImpl implements StrategyService {
         listprice.forEach((Map<String, Object> e) -> {
             total[0] = total[0].add(new BigDecimal(e.get("closeprice") + ""));
         });
+
         logger.info(stockname + ":25avgPrice: " + total[0].divide(new BigDecimal(listprice.size())));
 
         Map<String, String> result = new HashMap<>();
@@ -49,7 +50,7 @@ public class StrategyServiceImpl implements StrategyService {
             //获取一只股票25日平均值
             String price25avg = total[0].divide(new BigDecimal(listprice.size())).doubleValue() + "";
             result.put(code, price25avg);
-            String deletesql = "delete from tb_stock_focus where stockcode=" + code;
+            String deletesql = "delete from tb_stock_focus where stockcode='" + code+"'";
             dao.execute(deletesql);
             String insertfocus = "insert into tb_stock_focus (stockcode,stockname,destprice,updown,issend,datecreated)values('" + code + "','" + stockname + "','" + price25avg + "',1,0,NOW())";
             dao.execute(insertfocus);
