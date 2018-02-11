@@ -1,9 +1,12 @@
 # stock
 ## 记录股票  
-股票接口使用了两部分
-一部分是新浪股票接口
+
+股票接口 
+
+*新浪股票接口*
 http://hq.sinajs.cn/list=sh601866 沪市是sh开头 深市是sz开头
-一部分是腾讯股票接口 
+ 
+*腾讯股票接口* 
 http://data.gtimg.cn/flashdata/hushen/daily/18/sz000750.js （日K） 18代表年份
 http://data.gtimg.cn/flashdata/hushen/weekly/sz002410.js （周k）
 
