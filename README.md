@@ -2,10 +2,10 @@
 ## 记录股票  
 股票接口使用了两部分
 一部分是新浪股票接口
+http://hq.sinajs.cn/list=sh601866 沪市是sh开头 深市是sz开头
 一部分是腾讯股票接口 
-
-例如：  http://data.gtimg.cn/flashdata/hushen/daily/18/sz000750.js（日k）
-       http://data.gtimg.cn/flashdata/hushen/weekly/sz002410.js（周k）
+http://data.gtimg.cn/flashdata/hushen/daily/18/sz000750.js （日K） 18代表年份
+http://data.gtimg.cn/flashdata/hushen/weekly/sz002410.js （周k）
 
 由于是内部接口调用，并未考虑SQL注入问题
 ### 完成定时
