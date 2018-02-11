@@ -7,6 +7,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -55,6 +56,9 @@ public class HttpUtil {
 	 * @return
 	 */
 	public static Map<String,String> dealResponse(String reponse,int type){
+		if(StringUtils.isEmpty(reponse)){
+			return new HashMap<>();
+		}
 		Map<String,String> map = new HashMap<>();
 		String[] strarry = reponse.split("=");//解析成两段
 		if(strarry[1].length()>10){//获得股票代码

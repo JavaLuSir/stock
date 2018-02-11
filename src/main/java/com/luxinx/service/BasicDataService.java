@@ -14,4 +14,11 @@ public interface BasicDataService {
      * @return BigDecima 类型的平均值
      */
     BigDecimal getDayAvgPrice(String code,int days);
+
+    void updateTodayStockPrice(String code);
+
+    /**
+     * 更新现在所有的股票代码以及名称
+     */
+    void updateAllStockName();
 }
