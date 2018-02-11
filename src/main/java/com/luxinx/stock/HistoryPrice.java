@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Use to Deal Stock History Data infomation
+ * 获取历史股票数据组件
  */
 @Component
 public class HistoryPrice {
@@ -23,7 +23,7 @@ public class HistoryPrice {
 	@Autowired
 	private IDao dao;
 	/**
-	 * get all stock code and name from DB
+	 * 获取所有股票代码（不包括300开头股票）
 	 * @return return listmap
 	 */
 	private List<Map<String, Object>> geAlltStockCode(){

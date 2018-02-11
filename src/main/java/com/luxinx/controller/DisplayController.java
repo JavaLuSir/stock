@@ -47,17 +47,6 @@ public class DisplayController {
         return JSONObject.toJSONString(result);
     }
 
-    @RequestMapping(value="dayprice")
-    @ResponseBody
-    public String dayprice(@RequestParam(required = true) String code,@RequestParam(required = true) String days){
-        log.info("[dayprice]");
-        Integer.parseInt(days);
-        BigDecimal avgprice = basicDataService.getDayAvgPrice(code, Integer.parseInt(days));
-
-        return avgprice.toString();
-    }
-
-
     /**
      * get year data need a param year from 10-this year.
      * @param year example 10\11\12... and so on.
@@ -65,16 +54,22 @@ public class DisplayController {
      */
     @RequestMapping(value = "history")
     @ResponseBody
-    public String history(@RequestParam String year) {
-        int intyear = Integer.parseInt(year);
+    public String history(@RequestParam(required = true) String year) {
+        int intyear = 0;
+        try {
+            intyear = Integer.parseInt(year);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return "年份请输入两位数字";
+        }
         log.info("[history]");
+        int finalIntyear = intyear;
         Thread t = new Thread(() -> {
-            historyPrice.getHistoryDailyPrice(intyear);
+            historyPrice.getHistoryDailyPrice(finalIntyear);
         });
         t.start();
 
-
-        return "get stock start";
+        return "get stock history start";
     }
 }
 

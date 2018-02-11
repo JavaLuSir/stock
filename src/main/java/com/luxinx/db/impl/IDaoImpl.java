@@ -3,7 +3,6 @@ package com.luxinx.db.impl;
 import com.luxinx.db.IDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +24,9 @@ public class IDaoImpl implements IDao {
     }
 
     @Override
-    public List<Map<String, Object>> executeQuery(String sql, Map<String, Object> param) {
-        return null;
+    public List<Map<String, Object>> executeQuery(String sql, Object[] param) {
+
+        return jdbcTemplateObject.queryForList(sql,param);
     }
 
     @Override
@@ -36,7 +36,9 @@ public class IDaoImpl implements IDao {
     }
 
     @Override
-    public void execute(String sql, Map<String, Object> param) {
+    public void executeUpdate(String sql, Object[] param) {
 
+        jdbcTemplateObject.update(sql,param);
     }
+
 }
