@@ -4,5 +4,5 @@ target
 /.gitignore
 src/main/webapp/WEB-INF/classes/
 src/main/webapp/WEB-INF/lib/
-*.properties
+src/main/resources/config/*.properties
 
