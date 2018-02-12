@@ -1,19 +1,19 @@
 package com.luxinx.task;
 
 import com.luxinx.db.IDao;
-import com.luxinx.service.MonitorService;
+import com.luxinx.service.BasicDataService;
 import com.luxinx.service.StrategyService;
 import com.luxinx.stock.HistoryPrice;
-import com.luxinx.stock.StockCodeName;
-import com.luxinx.stock.StockLowestPrice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -35,40 +35,64 @@ public class JobTask {
     private StrategyService strategyService;
 
     @Autowired
-    private StockCodeName stockCodeName;
-    @Autowired
-    private StockLowestPrice stockLowestPrice;
-    @Autowired
-    private HistoryPrice historyPrice;
+    private BasicDataService basicDataService;
 
     @Autowired
     private IDao dao;
 
     @Scheduled(cron = "0 10 0 * * 1-5")
-    public void saveStockToDB() {
-        log.info("[saveStockToDB]");
-        stockCodeName.saveAllStocktoDB();
-    }
-
-    @Scheduled(cron = "0 56 21 * * 1-5")
-    public void updateAvgPrice() {
-        log.info("[updateAvgPrice]");
-        stockLowestPrice.updateLowestAndAvg();
+    public void saveStockCodeToDB() {
+        log.info("[saveStockCodeToDB]");
+        basicDataService.updateAllStockName();
     }
 
     @Scheduled(cron = "0 0 20 * * 1-5")
     public void historyDailyPrice() {
-       Stock.STOCK_CODE_FOCUS.clear();
+        Stock.STOCK_CODE_FOCUS.clear();
         log.info("[getHistoryDailyPrice]");
-        historyPrice.getHistoryDailyPrice();
+        //historyPrice.getHistoryDailyPrice();
     }
 
     @Scheduled(cron = "0 30 21 * * 1-5")
-    public void setStrategyPrice() {
-        log.info("[setStrategyPrice]");
+    public void choiceavgStock() {
+        log.info("[choiceavgStock]");
         List<Map<String, Object>> list = dao.executeQuery("select * from tb_stock_name");
-        list.forEach((Map<String,Object> e)->{
-            strategyService.choice25avgStock(e.get("stockid") + "");
+
+        Set<Map<String, String>> stock25set = new HashSet<>();
+        Set<Map<String, String>> stock60set = new HashSet<>();
+        Set<Map<String, String>> stock120set = new HashSet<>();
+
+        //获取超过25日均线的股票
+        list.forEach((Map<String, Object> e) -> {
+            String stockcode = e.get("stockid")+"";
+            String stockname = e.get("stockname")+"";
+                Stock.STOCK_CODE_ALL.put(stockcode,stockname);
+                Map<String, String> stock25map = strategyService.choiceavgStock(stockcode, "25");
+                stock25set.add(stock25map);
         });
+        //获取超过60日均线的股票
+        stock25set.forEach((Map<String, String> s)->{
+            s.entrySet().forEach(e->{
+                Map<String, String> stock60map = strategyService.choiceavgStock(e.getKey(), "60");
+                stock60set.add(stock60map);
+            });
+        });
+        //获取超过120日均线的股票
+        stock60set.forEach((Map<String,String> s)->{
+            s.entrySet().forEach(e->{
+                Map<String,String> stock120map = strategyService.choiceavgStock(e.getKey(),"120");
+                stock120set.add(stock120map);
+            });
+        });
+
+        stock120set.forEach((Map<String,String> s)->{
+            s.entrySet().forEach(e->{
+                String stockname = Stock.STOCK_CODE_ALL.get(e.getKey());
+                String insertfocus = "insert into tb_stock_focus (stockcode,stockname,destprice,updown,issend,datecreated)values(?,?,?,1,0,NOW())";
+                dao.executeUpdate(insertfocus,new Object[]{e.getKey(),stockname,e.getValue()});
+
+            });
+        });
+
     }
 }

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigDecimal;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -22,6 +24,8 @@ public class BasicDataServiceImplTest {
 
     @Test
     public void getDayAvgPrice() {
+        BigDecimal avgprice = basicDataService.getDayAvgPrice("000627", 25);
+        log.info(avgprice.doubleValue()+"");
     }
 
     @Test

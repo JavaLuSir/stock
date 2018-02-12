@@ -11,18 +11,18 @@ import java.util.Map;
 
 public class Strategy7DaysAvg {
 
-	private Logger log = Logger.getLogger(Strategy7DaysAvg.class);
+	private static Logger log = Logger.getLogger(Strategy7DaysAvg.class);
 
 	@Autowired
 	private IDao dao;
 
-	public void setTradePrice(){
+	public void setTradePrice(String code){
 		BigDecimal total = new BigDecimal(0);
-		String sql="select openprice from tb_stock_history where stockcode='000627' order by datestr desc  limit 7";
+		String sql="select closeprice from tb_stock_history where stockcode=? order by datestr desc  limit 7";
 
-		List<Map<String, Object>> list = dao.executeQuery(sql);
+		List<Map<String, Object>> list = dao.executeQuery(sql,new Object[]{code});
 		for(Map<String, Object> mp:list){
-			total=total.add(new BigDecimal(mp.get("openprice")+""));
+			total=total.add(new BigDecimal(mp.get("closeprice")+""));
 		}
 
 		BigDecimal avgprice = total.divide(new BigDecimal(7),BigDecimal.ROUND_HALF_DOWN);

@@ -16,13 +16,13 @@ import java.util.Map;
 
 @Service
 public class MonitorServiceImpl implements MonitorService {
-    private static final Logger logger = LoggerFactory.getLogger(MonitorServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(MonitorServiceImpl.class);
     @Autowired
     public IDao dao;
 
     @Override
     public void monitorDailyPrice() {
-        logger.info("============================start===================================");
+        log.info("============================start===================================");
         if (Stock.STOCK_CODE_FOCUS.isEmpty()) {
             String sql = "select stockcode,stockname,destprice,updown,issend from tb_stock_focus";
             Stock.STOCK_CODE_FOCUS = dao.executeQuery(sql);
@@ -69,20 +69,23 @@ public class MonitorServiceImpl implements MonitorService {
                             EmailNotice(focus, message);
                         }
                     }
-                    if ("1".equals(updown)) {
-                        if (detaprice > 0) {
-                            String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经涨过");
-                            EmailNotice(focus, message);
+                    if(currprice/destprice>1.05){
+                        if ("1".equals(updown)) {
+                            if (detaprice > 0) {
+                                String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经涨过");
+                                EmailNotice(focus, message);
+                            }
                         }
                     }
+
                 }
                 long ed = System.currentTimeMillis();
-                logger.info((ed - st) + "ms");
+                log.info((ed - st) + "ms");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        logger.info("============================end===================================");
+        log.info("============================end===================================");
 
     }
 
@@ -102,7 +105,7 @@ public class MonitorServiceImpl implements MonitorService {
         focus.put("issend", "1");
         String updatesql = "update tb_stock_focus set issend='1' where stockcode='" + focus.get("stockcode")+"'";
         dao.execute(updatesql);
-        logger.info("Email send...");
+        log.info("Email send...");
     }
 
 

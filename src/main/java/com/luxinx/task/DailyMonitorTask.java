@@ -14,20 +14,26 @@ public class DailyMonitorTask {
     private MonitorService monitorService;
 
     @Scheduled(cron = "* 30-59 9 * * 1-5")
-    public void monitorFocusPriceams() {
+    private void monitorFocusPriceams() {
         log.info("[monitorFocusPriceams]");
         monitorService.monitorDailyPrice();
     }
 
     @Scheduled(cron = "* 0-30 11 * * 1-5")
-    public void monitorFocusPriceamz() {
+    private void monitorFocusPriceamz() {
         log.info("[monitorFocusPriceamz]");
         monitorService.monitorDailyPrice();
     }
 
     @Scheduled(cron = "* * 10,13-15 * * 1-5")
-    public void monitorFocusPricepm() {
+    private void monitorFocusPricepm() {
         log.info("[monitorFocusPricepm]");
         monitorService.monitorDailyPrice();
+    }
+
+    @Scheduled(cron="0 0 11 * * 1-5")
+    private void monitorEmailSend(){
+        log.info("[monitorEmailSend]");
+
     }
 }

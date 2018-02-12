@@ -1,6 +1,7 @@
 package com.luxinx.service;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  *  策略接口
@@ -8,9 +9,10 @@ import java.util.Map;
 public interface StrategyService {
 
     /**
-     * 选取突破25日均线的股票
-     * @param code
+     * 选取突破日均线的股票
+     * @param code 股票代码
+     * @param days 平均天数
      * @return
      */
-    Map<String,String> choice25avgStock(String code);
+    Map<String,String> choiceavgStock(String code,String days);
 }

@@ -37,7 +37,7 @@ public class IDaoTest {
 
     @Test
     public void execute() {
-        String sql="delete from tb_lock where id='1'";
+        String sql="truncate table tb_stock_focus";
         dao.execute(sql);
     }
 

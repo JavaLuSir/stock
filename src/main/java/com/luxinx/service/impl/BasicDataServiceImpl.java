@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -48,6 +49,7 @@ public class BasicDataServiceImpl implements BasicDataService {
     }
 
     @Override
+    @Transactional
     public void updateAllStockName() {
 
         long start = System.currentTimeMillis();
@@ -72,12 +74,14 @@ public class BasicDataServiceImpl implements BasicDataService {
         }
 
         Set<Map<String, String>> stockresult = requestStock(stockcode);
+        dao.execute("truncate table tb_stock_name");
         stockresult.forEach(m->{
             m.forEach((stcode,stname)->{
                 try {
                     dao.executeUpdate("insert into tb_stock_name values(?,?)",new Object[]{stcode,stname});
                 } catch (Exception e) {
-                    dao.executeUpdate("update tb_stock_name SET stockname=? where stockid=?",new Object[]{stname,stcode});
+                    log.info("SQL Exception...");
+                    e.printStackTrace();
                 }
             });
         });
