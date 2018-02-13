@@ -24,7 +24,7 @@ public class MonitorServiceImpl implements MonitorService {
     public void monitorDailyPrice() {
         log.info("============================start===================================");
         if (Stock.STOCK_CODE_FOCUS.isEmpty()) {
-            String sql = "select stockcode,stockname,destprice,updown,issend from tb_stock_focus";
+            String sql = "select stockcode,stockname,destprice,updown,issend from tb_stock_focus where issend=0";
             Stock.STOCK_CODE_FOCUS = dao.executeQuery(sql);
         }
         for (Map<String, Object> focus : Stock.STOCK_CODE_FOCUS) {
@@ -66,14 +66,16 @@ public class MonitorServiceImpl implements MonitorService {
                     if ("-1".equals(updown)) {
                         if (detaprice < 0) {
                             String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经跌破");
-                            EmailNotice(focus, message);
+                            Stock.EMAIL_QUEUE.add(message);
+                            //EmailNotice(focus, message);
                         }
                     }
                     if(currprice/destprice>1.05){
                         if ("1".equals(updown)) {
                             if (detaprice > 0) {
                                 String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经涨过");
-                                EmailNotice(focus, message);
+                                Stock.EMAIL_QUEUE.add(message);
+                                //EmailNotice(focus, message);
                             }
                         }
                     }
@@ -126,6 +128,6 @@ public class MonitorServiceImpl implements MonitorService {
         if (strprecent.length() > 4) {
             strprecent = strprecent.substring(0, 4);
         }
-        return "股票(" + stockcode + ") " + stockname + s + destprice + "元，当前价格为" + currprice + "元。距目标价振幅" + strprecent + "%";
+        return "股票(" + stockcode + ") " + stockname + s + destprice + "元，当前价格为" + currprice + "元。距目标价振幅" + strprecent + "%\n";
     }
 }

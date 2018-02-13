@@ -53,6 +53,7 @@ public class JobTask {
         //historyPrice.getHistoryDailyPrice();
     }
 
+
     @Scheduled(cron = "0 30 21 * * 1-5")
     public void choiceavgStock() {
         log.info("[choiceavgStock]");

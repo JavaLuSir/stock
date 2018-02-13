@@ -41,8 +41,5 @@ public class MailUtil {
         transport.close();  
     
 	}
-	public static void main(String[] args) throws MessagingException {
-		MailUtil.sendMessage("javalusir@163.com", "撒旦撒旦");
-	} 
 		
 }

@@ -1,11 +1,14 @@
 package com.luxinx.task;
 
 import com.luxinx.service.MonitorService;
+import com.luxinx.util.MailUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import javax.mail.MessagingException;
 
 @Component
 public class DailyMonitorTask {
@@ -31,9 +34,18 @@ public class DailyMonitorTask {
         monitorService.monitorDailyPrice();
     }
 
-    @Scheduled(cron="0 0 11 * * 1-5")
+    @Scheduled(cron="0 0 10 * * 1-5")
     private void monitorEmailSend(){
         log.info("[monitorEmailSend]");
+       if(!Stock.EMAIL_QUEUE.isEmpty()){
+           Stock.EMAIL_QUEUE.forEach(e->{
+               try {
+                   MailUtil.sendMessage("javalusir@163.com",e.toString());
+               } catch (MessagingException e1) {
+                   e1.printStackTrace();
+               }
+           });
+       }
 
     }
 }

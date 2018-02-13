@@ -2,6 +2,7 @@ package com.luxinx.service.impl;
 
 import com.luxinx.service.MonitorService;
 import com.luxinx.task.DailyMonitorTask;
+import com.luxinx.task.Stock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
