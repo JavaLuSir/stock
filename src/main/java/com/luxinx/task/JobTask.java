@@ -3,17 +3,13 @@ package com.luxinx.task;
 import com.luxinx.db.IDao;
 import com.luxinx.service.BasicDataService;
 import com.luxinx.service.StrategyService;
-import com.luxinx.stock.HistoryPrice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -50,13 +46,15 @@ public class JobTask {
     public void historyDailyPrice() {
         Stock.STOCK_CODE_FOCUS.clear();
         log.info("[getHistoryDailyPrice]");
-        //historyPrice.getHistoryDailyPrice();
+        basicDataService.updateTodayStockPrice();
+        dao.execute("truncate table tb_stock_focus");
     }
 
 
     @Scheduled(cron = "0 30 21 * * 1-5")
     public void choiceavgStock() {
         log.info("[choiceavgStock]");
+        Stock.STOCK_CODE_FOCUS.clear();
         List<Map<String, Object>> list = dao.executeQuery("select * from tb_stock_name");
 
         Set<Map<String, String>> stock25set = new HashSet<>();
@@ -91,7 +89,13 @@ public class JobTask {
                 String stockname = Stock.STOCK_CODE_ALL.get(e.getKey());
                 String insertfocus = "insert into tb_stock_focus (stockcode,stockname,destprice,updown,issend,datecreated)values(?,?,?,1,0,NOW())";
                 dao.executeUpdate(insertfocus,new Object[]{e.getKey(),stockname,e.getValue()});
+                Map<String,String> smap = new HashMap<>();
+                smap.put("updown","1");
+                smap.put("destprice",e.getValue());
+                smap.put("stockcode",e.getKey());
 
+                smap.put(e.getKey(),e.getValue());
+                Stock.STOCK_CODE_FOCUS.add(smap);
             });
         });
 

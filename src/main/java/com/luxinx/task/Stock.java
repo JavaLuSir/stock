@@ -1,15 +1,14 @@
 package com.luxinx.task;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Stock {
+    public static boolean HASSENDED=false;
 
-    public static List<Map<String,Object>> STOCK_CODE_FOCUS = new CopyOnWriteArrayList<>();
+    public static Queue<Map<String,String>> STOCK_CODE_FOCUS = new ConcurrentLinkedDeque<>();
 
     public static Map<String,String> STOCK_CODE_ALL = new ConcurrentHashMap<>();
 

@@ -15,7 +15,16 @@ public interface BasicDataService {
      */
     BigDecimal getDayAvgPrice(String code,int days);
 
-    void updateTodayStockPrice(String code);
+    /**
+     * 更新当年股票价格信息
+     */
+    void updateTodayStockPrice();
+
+    /**
+     * 更新当年股票价格信息
+     * @param year 两位年份
+     */
+    void updateTodayStockPrice(String year);
 
     /**
      * 更新现在所有的股票代码以及名称

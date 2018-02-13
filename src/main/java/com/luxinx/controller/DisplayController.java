@@ -3,7 +3,6 @@ package com.luxinx.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.luxinx.service.BasicDataService;
 import com.luxinx.service.DisplayService;
-import com.luxinx.stock.HistoryPrice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -25,9 +23,6 @@ public class DisplayController {
 
     @Autowired
     public DisplayService displayService;
-
-    @Autowired
-    public HistoryPrice historyPrice;
 
     @Autowired
     public BasicDataService basicDataService;
@@ -43,7 +38,7 @@ public class DisplayController {
     @ResponseBody
     public String price() {
         log.info("[price]");
-        List<Map<String, Object>> result = displayService.getYearAvgPrice("");
+        List<Map<String, Object>> result = displayService.displayFocusStock();
         return JSONObject.toJSONString(result);
     }
 
@@ -55,17 +50,11 @@ public class DisplayController {
     @RequestMapping(value = "history")
     @ResponseBody
     public String history(@RequestParam(required = true) String year) {
-        int intyear = 0;
-        try {
-            intyear = Integer.parseInt(year);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            return "年份请输入两位数字";
-        }
+
         log.info("[history]");
-        int finalIntyear = intyear;
+
         Thread t = new Thread(() -> {
-            historyPrice.getHistoryDailyPrice(finalIntyear);
+            basicDataService.updateTodayStockPrice(year);
         });
         t.start();
 

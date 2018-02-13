@@ -19,24 +19,9 @@ public class DisplayServiceImpl implements DisplayService {
     @Autowired
     public IDao dao;
 
-    @Autowired
-    public BasicDataService basicDataService;
-
     @Override
-    public List<Map<String, Object>> getYearAvgPrice(String stockparam) {
-
-        String query = "";
-        if(stockparam!=null&&!"".equals(stockparam)){
-            if(stockparam.startsWith("0")||stockparam.startsWith("6")){
-                query = "and stockcode like '"+stockparam+"%'";
-            }else{
-                query = "and stockname like '"+stockparam+"%'";
-            }
-        }
-
-
-        String sql = "select t.stockcode ,t.currprice/t.low cl,t.currprice ,t.avgprice ,n.stockname stockname FROM tb_stock_lowest t,tb_stock_name n where t.stockcode=n.stockid and t.currprice/t.low > 0 "+query+" ORDER BY t.currprice/t.low ASC  limit 0,200";
-        logger.info(sql);
+    public List<Map<String, Object>> displayFocusStock() {
+        String sql = "select * from tb_stock_focus";
         return dao.executeQuery(sql);
     }
 }

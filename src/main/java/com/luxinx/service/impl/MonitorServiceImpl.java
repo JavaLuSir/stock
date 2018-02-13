@@ -22,12 +22,9 @@ public class MonitorServiceImpl implements MonitorService {
 
     @Override
     public void monitorDailyPrice() {
+        Stock.HASSENDED = true;
         log.info("============================start===================================");
-        if (Stock.STOCK_CODE_FOCUS.isEmpty()) {
-            String sql = "select stockcode,stockname,destprice,updown,issend from tb_stock_focus where issend=0";
-            Stock.STOCK_CODE_FOCUS = dao.executeQuery(sql);
-        }
-        for (Map<String, Object> focus : Stock.STOCK_CODE_FOCUS) {
+        Stock.STOCK_CODE_FOCUS.forEach((Map<String, String> focus) -> {
             String code = focus.get("stockcode") + "";
             String precode;
             if (code.startsWith("0") || code.startsWith("3")) {
@@ -60,54 +57,36 @@ public class MonitorServiceImpl implements MonitorService {
                     currprice = Double.parseDouble(strcurrprice);
                 }
                 double detaprice = currprice - destprice;
-                String updown = focus.get("updown") + "";
-                String issend = focus.get("issend") + "";
-                if ("0".equals(issend)) {
+                String updown = focus.get("updown");
+                if (!Stock.HASSENDED) {
+
                     if ("-1".equals(updown)) {
                         if (detaprice < 0) {
                             String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经跌破");
                             Stock.EMAIL_QUEUE.add(message);
-                            //EmailNotice(focus, message);
                         }
                     }
-                    if(currprice/destprice>1.05){
+                    if (currprice / destprice > 1.05) {
                         if ("1".equals(updown)) {
                             if (detaprice > 0) {
                                 String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经涨过");
                                 Stock.EMAIL_QUEUE.add(message);
-                                //EmailNotice(focus, message);
                             }
                         }
                     }
-
                 }
+
+
                 long ed = System.currentTimeMillis();
                 log.info((ed - st) + "ms");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+
+        });
+
         log.info("============================end===================================");
 
-    }
-
-
-    /**
-     * Send Email
-     *
-     * @param focus   the stock of focus
-     * @param message email notice message
-     */
-    private void EmailNotice(Map<String, Object> focus, String message) {
-        try {
-            MailUtil.sendMessage("javalusir@163.com", message);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-        focus.put("issend", "1");
-        String updatesql = "update tb_stock_focus set issend='1' where stockcode='" + focus.get("stockcode")+"'";
-        dao.execute(updatesql);
-        log.info("Email send...");
     }
 
 
@@ -121,9 +100,9 @@ public class MonitorServiceImpl implements MonitorService {
      * @param s
      * @return
      */
-    private String getPrecentStr(Map<String, Object> focus, double destprice, double currprice, double detaprice, String s) {
-        String stockcode = focus.get("stockcode") + "";
-        String stockname = focus.get("stockname") + "";
+    private String getPrecentStr(Map<String, String> focus, double destprice, double currprice, double detaprice, String s) {
+        String stockcode = focus.get("stockcode");
+        String stockname = focus.get("stockname");
         String strprecent = ((detaprice / destprice) * 100) + "";
         if (strprecent.length() > 4) {
             strprecent = strprecent.substring(0, 4);

@@ -22,10 +22,11 @@ public class JobTaskTest {
 
     @Test
     public void historyDailyPrice() {
+        jobTask.historyDailyPrice();
     }
 
     @Test
     public void choiceavgStock() {
-       // jobTask.choiceavgStock();
+        jobTask.choiceavgStock();
     }
 }
