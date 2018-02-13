@@ -55,6 +55,7 @@ public class JobTask {
     public void choiceavgStock() {
         log.info("[choiceavgStock]");
         Stock.STOCK_CODE_FOCUS.clear();
+        Stock.HASSENDED=false;
         List<Map<String, Object>> list = dao.executeQuery("select * from tb_stock_name");
 
         Set<Map<String, String>> stock25set = new HashSet<>();

@@ -28,7 +28,7 @@ public class DailyMonitorTask {
         monitorService.monitorDailyPrice();
     }
 
-    @Scheduled(cron = "* * 10,13-15 * * 1-5")
+    @Scheduled(cron = "* * 10,13-14 * * 1-5")
     private void monitorFocusPricepm() {
         log.info("[monitorFocusPricepm]");
         monitorService.monitorDailyPrice();
