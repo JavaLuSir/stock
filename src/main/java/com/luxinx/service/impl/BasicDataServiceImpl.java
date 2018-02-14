@@ -52,6 +52,7 @@ public class BasicDataServiceImpl implements BasicDataService {
 
     @Override
     public void updateTodayStockPrice(String year) {
+        log.info("year:"+year);
         if(StringUtils.isEmpty(year)){
             return;
         }
@@ -70,6 +71,7 @@ public class BasicDataServiceImpl implements BasicDataService {
             String url;
             try {
                 url = "http://data.gtimg.cn/flashdata/hushen/daily/" + year + "/" + precode + code + ".js";
+                log.info("requrl:"+url);
                 result = HttpUtil.doGet(url);
             } catch (Exception e) {
                 log.info("Http Exception...");
@@ -104,6 +106,9 @@ public class BasicDataServiceImpl implements BasicDataService {
     @Transactional
     public void updateAllStockName() {
 
+        //更新所有内存中的股票代码
+        Stock.STOCK_CODE_ALL.clear();
+
         long start = System.currentTimeMillis();
 
         Set<String> stockcode = new HashSet<>();
@@ -131,6 +136,8 @@ public class BasicDataServiceImpl implements BasicDataService {
             m.forEach((stcode, stname) -> {
                 try {
                     dao.executeUpdate("insert into tb_stock_name values(?,?)", new Object[]{stcode, stname});
+                    //清空后放入股票代码
+                    Stock.STOCK_CODE_ALL.put(stcode,stname);
                 } catch (Exception e) {
                     log.info("SQL Exception...");
                     e.printStackTrace();

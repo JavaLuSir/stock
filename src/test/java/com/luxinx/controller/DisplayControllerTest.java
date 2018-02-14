@@ -26,7 +26,7 @@ public class DisplayControllerTest {
 
     @Test
     public void dayprice() {
-        BigDecimal price = basicDataService.getDayAvgPrice("002410", 250);
+        BigDecimal price = basicDataService.getDayAvgPrice("002258", 25);
 
         log.info("dayprice :"+price.doubleValue()+"");
     }
