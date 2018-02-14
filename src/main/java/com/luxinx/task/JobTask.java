@@ -44,10 +44,14 @@ public class JobTask {
 
     @Scheduled(cron = "0 0 20 * * 1-5")
     public void historyDailyPrice() {
+        long start = System.currentTimeMillis();
+
         Stock.STOCK_CODE_FOCUS.clear();
         log.info("[getHistoryDailyPrice]");
         basicDataService.updateTodayStockPrice();
         dao.execute("truncate table tb_stock_focus");
+        long end = System.currentTimeMillis();
+        log.info((end - start) + "ms");
     }
 
 
@@ -55,43 +59,43 @@ public class JobTask {
     public void choiceavgStock() {
         log.info("[choiceavgStock]");
         Stock.STOCK_CODE_FOCUS.clear();
-        Stock.HASSENDED=false;
+        Stock.HASSENDED = false;
 
         Set<Map<String, String>> stock25set = new HashSet<>();
         Set<Map<String, String>> stock60set = new HashSet<>();
         Set<Map<String, String>> stock120set = new HashSet<>();
 
         //获取超过25日均线的股票
-        Stock.STOCK_CODE_ALL.forEach((k,v) -> {
-                Map<String, String> stock25map = strategyService.choiceavgStock(k, "25");
-                stock25set.add(stock25map);
+        Stock.STOCK_CODE_ALL.forEach((k, v) -> {
+            Map<String, String> stock25map = strategyService.choiceavgStock(k, "25");
+            stock25set.add(stock25map);
         });
         //获取超过60日均线的股票
-        stock25set.forEach((Map<String, String> s)->{
-            s.entrySet().forEach(e->{
+        stock25set.forEach((Map<String, String> s) -> {
+            s.entrySet().forEach(e -> {
                 Map<String, String> stock60map = strategyService.choiceavgStock(e.getKey(), "60");
                 stock60set.add(stock60map);
             });
         });
         //获取超过120日均线的股票
-        stock60set.forEach((Map<String,String> s)->{
-            s.entrySet().forEach(e->{
-                Map<String,String> stock120map = strategyService.choiceavgStock(e.getKey(),"120");
+        stock60set.forEach((Map<String, String> s) -> {
+            s.entrySet().forEach(e -> {
+                Map<String, String> stock120map = strategyService.choiceavgStock(e.getKey(), "120");
                 stock120set.add(stock120map);
             });
         });
 
-        stock120set.forEach((Map<String,String> s)->{
-            s.entrySet().forEach(e->{
+        stock120set.forEach((Map<String, String> s) -> {
+            s.entrySet().forEach(e -> {
                 String stockname = Stock.STOCK_CODE_ALL.get(e.getKey());
                 String insertfocus = "insert into tb_stock_focus (stockcode,stockname,destprice,updown,issend,datecreated)values(?,?,?,1,0,NOW())";
-                dao.executeUpdate(insertfocus,new Object[]{e.getKey(),stockname,e.getValue()});
-                Map<String,String> smap = new HashMap<>();
-                smap.put("updown","1");
-                smap.put("destprice",e.getValue());
-                smap.put("stockcode",e.getKey());
+                dao.executeUpdate(insertfocus, new Object[]{e.getKey(), stockname, e.getValue()});
+                Map<String, String> smap = new HashMap<>();
+                smap.put("updown", "1");
+                smap.put("destprice", e.getValue());
+                smap.put("stockcode", e.getKey());
 
-                smap.put(e.getKey(),e.getValue());
+                smap.put(e.getKey(), e.getValue());
                 Stock.STOCK_CODE_FOCUS.add(smap);
             });
         });

@@ -96,7 +96,7 @@ public class BasicDataServiceImpl implements BasicDataService {
                     try {
                         dao.executeUpdate(sql, new Object[]{id, code, openprice, closeprice, highprice, lowprice, volumn, datestr});
                     } catch (Exception e) {
-                        log.error("SQLException...");
+                        log.error("SQLException..."+datestr);
                     }
 
                 } else {
@@ -118,7 +118,7 @@ public class BasicDataServiceImpl implements BasicDataService {
                         try {
                             dao.executeUpdate(sql, new Object[]{id, code, openprice, closeprice, highprice, lowprice, volumn, datestr});
                         } catch (Exception e) {
-                            log.error("SQLException...");
+                            log.error("SQLException..."+datestr);
                         }
                     }
 

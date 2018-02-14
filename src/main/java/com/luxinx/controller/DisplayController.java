@@ -54,7 +54,7 @@ public class DisplayController {
         log.info("[history]");
 
         Thread t = new Thread(() -> {
-            basicDataService.updateTodayStockPrice(year);
+            basicDataService.updateTodayStockPrice(year,false);
         });
         t.start();
 

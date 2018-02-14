@@ -30,11 +30,15 @@ public class JobTaskTest {
     @Test
     public void historyDailyPrice() {
         List<Map<String, Object>> result = dao.executeQuery("select * from tb_stock_name");
-        result.forEach(e->{
-            Stock.STOCK_CODE_ALL.put(e.get("stockid")+"",e.get("stockname")+"");
+        result.forEach(e -> {
+            Stock.STOCK_CODE_ALL.put(e.get("stockid") + "", e.get("stockname") + "");
 
         });
+        long start = System.currentTimeMillis();
         jobTask.historyDailyPrice();
+        long end = System.currentTimeMillis();
+        log.info((end - start) + "ms");
+
     }
 
     @Test
