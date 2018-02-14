@@ -56,18 +56,14 @@ public class JobTask {
         log.info("[choiceavgStock]");
         Stock.STOCK_CODE_FOCUS.clear();
         Stock.HASSENDED=false;
-        List<Map<String, Object>> list = dao.executeQuery("select * from tb_stock_name");
 
         Set<Map<String, String>> stock25set = new HashSet<>();
         Set<Map<String, String>> stock60set = new HashSet<>();
         Set<Map<String, String>> stock120set = new HashSet<>();
 
         //获取超过25日均线的股票
-        list.forEach((Map<String, Object> e) -> {
-            String stockcode = e.get("stockid")+"";
-            String stockname = e.get("stockname")+"";
-                Stock.STOCK_CODE_ALL.put(stockcode,stockname);
-                Map<String, String> stock25map = strategyService.choiceavgStock(stockcode, "25");
+        Stock.STOCK_CODE_ALL.forEach((k,v) -> {
+                Map<String, String> stock25map = strategyService.choiceavgStock(k, "25");
                 stock25set.add(stock25map);
         });
         //获取超过60日均线的股票

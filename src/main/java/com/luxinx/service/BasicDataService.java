@@ -23,8 +23,9 @@ public interface BasicDataService {
     /**
      * 更新当年股票价格信息
      * @param year 两位年份
+     * @param istoday 是否只获取今天 true获取今天；false获取年份
      */
-    void updateTodayStockPrice(String year);
+    void updateTodayStockPrice(String year,boolean istoday);
 
     /**
      * 更新现在所有的股票代码以及名称

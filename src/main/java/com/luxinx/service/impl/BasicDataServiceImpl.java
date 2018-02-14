@@ -47,13 +47,13 @@ public class BasicDataServiceImpl implements BasicDataService {
 
     @Override
     public void updateTodayStockPrice() {
-        updateTodayStockPrice(DateUtil.getThisYear());
+        updateTodayStockPrice(DateUtil.getThisYear(), true);
     }
 
     @Override
-    public void updateTodayStockPrice(String year) {
-        log.info("year:"+year);
-        if(StringUtils.isEmpty(year)){
+    public void updateTodayStockPrice(String year, boolean istoday) {
+        log.info("year:" + year);
+        if (StringUtils.isEmpty(year)) {
             return;
         }
         if (Stock.STOCK_CODE_ALL.isEmpty()) {
@@ -61,26 +61,27 @@ public class BasicDataServiceImpl implements BasicDataService {
         }
         Stock.STOCK_CODE_ALL.forEach((code, v) -> {
             String precode = "";
-            if(code.startsWith("6")){
-                precode="sh";
-            }else{
-                precode="sz";
+            if (code.startsWith("6")) {
+                precode = "sh";
+            } else {
+                precode = "sz";
             }
 
             String result = "";
             String url;
             try {
                 url = "http://data.gtimg.cn/flashdata/hushen/daily/" + year + "/" + precode + code + ".js";
-                log.info("requrl:"+url);
+                log.info("requrl:" + url);
                 result = HttpUtil.doGet(url);
             } catch (Exception e) {
                 log.info("Http Exception...");
             }
             if (!"".equals(result)) {
                 String[] resultarry = result.split("\\\\n\\\\");
-                for (int i = 1; i < resultarry.length - 1; i++) {
+                if (istoday) {
+
                     String id = UUID.randomUUID().toString().replaceAll("-", "");
-                    String[] pricearry = resultarry[i].split(" ");
+                    String[] pricearry = resultarry[resultarry.length - 2].split(" ");
                     String openprice = pricearry[1];
                     String closeprice = pricearry[2];
                     String highprice = pricearry[3];
@@ -90,13 +91,37 @@ public class BasicDataServiceImpl implements BasicDataService {
                     if ("sh000001".equals(precode + code)) {
                         code = precode + code;
                     }
-                    String sql = "insert into tb_stock_history values('" + id + "','" + code + "','" + openprice + "','" + closeprice + "','" + highprice + "','" + lowprice + "','" + volumn + "','" + datestr + "')";
+                    String sql = "insert into tb_stock_history values(?,?,?,?,?,?,?,?)";
                     log.info(sql);
                     try {
-                        dao.execute(sql);
+                        dao.executeUpdate(sql, new Object[]{id, code, openprice, closeprice, highprice, lowprice, volumn, datestr});
                     } catch (Exception e) {
                         log.error("SQLException...");
                     }
+
+                } else {
+
+                    for (int i = 1; i < resultarry.length - 1; i++) {
+                        String id = UUID.randomUUID().toString().replaceAll("-", "");
+                        String[] pricearry = resultarry[i].split(" ");
+                        String openprice = pricearry[1];
+                        String closeprice = pricearry[2];
+                        String highprice = pricearry[3];
+                        String lowprice = pricearry[4];
+                        String volumn = pricearry[5];
+                        String datestr = pricearry[0].replaceAll("\\n", "");
+                        if ("sh000001".equals(precode + code)) {
+                            code = precode + code;
+                        }
+                        String sql = "insert into tb_stock_history values(?,?,?,?,?,?,?,?)";
+                        log.info(sql);
+                        try {
+                            dao.executeUpdate(sql, new Object[]{id, code, openprice, closeprice, highprice, lowprice, volumn, datestr});
+                        } catch (Exception e) {
+                            log.error("SQLException...");
+                        }
+                    }
+
                 }
             }
         });
@@ -137,7 +162,7 @@ public class BasicDataServiceImpl implements BasicDataService {
                 try {
                     dao.executeUpdate("insert into tb_stock_name values(?,?)", new Object[]{stcode, stname});
                     //清空后放入股票代码
-                    Stock.STOCK_CODE_ALL.put(stcode,stname);
+                    Stock.STOCK_CODE_ALL.put(stcode, stname);
                 } catch (Exception e) {
                     log.info("SQL Exception...");
                     e.printStackTrace();
