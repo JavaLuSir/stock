@@ -1,6 +1,7 @@
 package com.luxinx.task;
 
 import com.luxinx.db.IDao;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -23,17 +24,23 @@ public class JobTaskTest {
     @Autowired
     private IDao dao;
 
+    @Before
+    public void init() {
+        List<Map<String, Object>> result = dao.executeQuery("select * from tb_stock_name");
+        result.forEach(e -> {
+            Stock.STOCK_CODE_ALL.put(e.get("stockid") + "", e.get("stockname") + "");
+
+        });
+
+    }
+
     @Test
     public void saveStockCodeToDB() {
     }
 
     @Test
     public void historyDailyPrice() {
-        List<Map<String, Object>> result = dao.executeQuery("select * from tb_stock_name");
-        result.forEach(e -> {
-            Stock.STOCK_CODE_ALL.put(e.get("stockid") + "", e.get("stockname") + "");
 
-        });
         long start = System.currentTimeMillis();
         jobTask.historyDailyPrice();
         long end = System.currentTimeMillis();
@@ -43,6 +50,11 @@ public class JobTaskTest {
 
     @Test
     public void choiceavgStock() {
+
+        long start = System.currentTimeMillis();
         jobTask.choiceavgStock();
+        long end = System.currentTimeMillis();
+        log.info((end - start) + "ms");
+
     }
 }

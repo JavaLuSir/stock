@@ -39,7 +39,10 @@ public class JobTask {
     @Scheduled(cron = "0 10 0 * * 1-5")
     public void saveStockCodeToDB() {
         log.info("[saveStockCodeToDB]");
+        long start = System.currentTimeMillis();
         basicDataService.updateAllStockName();
+        long end = System.currentTimeMillis();
+        log.info((end - start) + "ms");
     }
 
     @Scheduled(cron = "0 0 20 * * 1-5")
@@ -58,6 +61,8 @@ public class JobTask {
     @Scheduled(cron = "0 30 21 * * 1-5")
     public void choiceavgStock() {
         log.info("[choiceavgStock]");
+        long start = System.currentTimeMillis();
+
         Stock.STOCK_CODE_FOCUS.clear();
         Stock.HASSENDED = false;
 
@@ -99,6 +104,8 @@ public class JobTask {
                 Stock.STOCK_CODE_FOCUS.add(smap);
             });
         });
+        long end = System.currentTimeMillis();
+        log.info((end - start) + "ms");
 
     }
 }
