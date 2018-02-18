@@ -180,6 +180,11 @@ public class BasicDataServiceImpl implements BasicDataService {
         log.info("get sh stock spend time:" + (end - start) + "ms");
     }
 
+    @Override
+    public List<Map<String,Object>> getAllStockCodeName() {
+        return dao.executeQuery("select * from tb_stock_name");
+    }
+
     /**
      * request http://hq.sinajs.cn url and get stock and name put them to a set
      *

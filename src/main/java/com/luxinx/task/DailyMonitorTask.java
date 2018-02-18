@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 
+/**
+ * 每日监控股票价格
+ */
 @Component
 public class DailyMonitorTask {
     private static final Logger log = LoggerFactory.getLogger(DailyMonitorTask.class);

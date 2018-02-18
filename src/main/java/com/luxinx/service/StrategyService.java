@@ -15,4 +15,13 @@ public interface StrategyService {
      * @return
      */
     Map<String,String> choiceavgStock(String code,String days);
+
+    /**
+     * 保存选择好的股票
+     * @param code 股票代码
+     * @param stockname 股票名称
+     * @param destprice 股票价格
+     * @return
+     */
+    Map<String,String> saveChoicedStock(String code, String stockname,String destprice);
 }

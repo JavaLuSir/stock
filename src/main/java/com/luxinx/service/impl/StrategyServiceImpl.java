@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -18,10 +19,14 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public Map<String, String> choiceavgStock(String code,String days) {
+        if(StringUtils.isEmpty(code)||StringUtils.isEmpty(days)){
+            log.error("code or days can't be empty");
+            return new HashMap<>();
+        }
         Map<String, String> stockmap = new HashMap<>();
         try {
-            String sqlavg = "select closeprice,vol,tn.stockname from tb_stock_history th,tb_stock_name tn  where th.stockcode=tn.stockid and stockcode=? order by datestr DESC limit ?";
-            List<Map<String, Object>> listprice = dao.executeQuery(sqlavg,new Object[]{code,days});
+            String sqlavg = "select closeprice,vol,tn.stockname from tb_stock_history th,tb_stock_name tn  where th.stockcode=tn.stockid and stockcode=? order by datestr DESC limit "+days;
+            List<Map<String, Object>> listprice = dao.executeQuery(sqlavg,new Object[]{code});
             if (listprice == null || listprice.isEmpty()||listprice.size()<Integer.parseInt(days)) {
                 return new HashMap<>();
             }
@@ -60,5 +65,20 @@ public class StrategyServiceImpl implements StrategyService {
         }finally {
             return stockmap;
         }
+    }
+
+    @Override
+    public Map<String, String> saveChoicedStock(String code, String stockname,String destprice) {
+        if(StringUtils.isEmpty(code)||StringUtils.isEmpty(stockname)||StringUtils.isEmpty(destprice)){
+            return new HashMap<>();
+        }
+        String insertfocus = "insert into tb_stock_focus (stockcode,stockname,destprice,updown,issend,datecreated)values(?,?,?,1,0,NOW())";
+        dao.executeUpdate(insertfocus, new Object[]{code, stockname, destprice});
+        Map<String, String> smap = new HashMap<>();
+        smap.put("updown", "1");
+        smap.put("destprice", destprice);
+        smap.put("stockcode", code);
+        smap.put(code, destprice);
+        return smap;
     }
 }

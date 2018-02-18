@@ -1,6 +1,8 @@
 package com.luxinx.service;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 获取基本数据信息
@@ -31,4 +33,9 @@ public interface BasicDataService {
      * 更新现在所有的股票代码以及名称
      */
     void updateAllStockName();
+
+    /**
+     * 获取现在所有的股票代码以及名称
+     */
+    List<Map<String,Object>> getAllStockCodeName();
 }
