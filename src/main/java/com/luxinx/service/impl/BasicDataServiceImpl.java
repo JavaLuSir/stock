@@ -162,17 +162,17 @@ public class BasicDataServiceImpl implements BasicDataService {
         }
 
         Set<Map<String, String>> stockresult = requestStock(stockcode);
-        dao.execute("truncate table tb_stock_name");
         Stock.STOCK_CODE_ALL.clear();
         stockresult.forEach(m -> {
             m.forEach((stcode, stname) -> {
                 try {
                     dao.executeUpdate("insert into tb_stock_name values(?,?)", new Object[]{stcode, stname});
+                } catch (Exception e) {
+                    dao.executeUpdate("update tb_stock_name set stockname=? where stockid=?", new Object[]{stname,stockcode});
+                    log.info("SQL Exception...");
+                } finally {
                     //清空后放入股票代码
                     Stock.STOCK_CODE_ALL.put(stcode, stname);
-                } catch (Exception e) {
-                    log.info("SQL Exception...");
-                    e.printStackTrace();
                 }
             });
         });
