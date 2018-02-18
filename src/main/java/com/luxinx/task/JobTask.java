@@ -108,7 +108,9 @@ public class JobTask {
             s.entrySet().forEach(e -> {
                 String stockname = Stock.STOCK_CODE_ALL.get(e.getKey());
                 Map<String, String> smap = strategyService.saveChoicedStock(e.getKey(), stockname, e.getValue());
-                Stock.STOCK_CODE_FOCUS.add(smap);
+                if(!smap.isEmpty()){
+                    Stock.STOCK_CODE_FOCUS.add(smap);
+                }
             });
         });
         log.info(Stock.STOCK_CODE_FOCUS+"");
