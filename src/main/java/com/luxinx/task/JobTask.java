@@ -45,22 +45,23 @@ public class JobTask {
         log.info((end - start) + "ms");
     }
 
-    @Scheduled(cron = "0 0 20 * * 1-5")
+    //@Scheduled(cron = "0 0 20 * * 1-5")
+    @Scheduled(cron = "30 49 11 * * 1-7")
     public void historyDailyPrice() {
-        long start = System.currentTimeMillis();
 
-        Stock.STOCK_CODE_FOCUS.clear();
+        long start = System.currentTimeMillis();
         log.info("[getHistoryDailyPrice]");
         basicDataService.updateTodayStockPrice();
-        dao.execute("truncate table tb_stock_focus");
         long end = System.currentTimeMillis();
         log.info((end - start) + "ms");
     }
 
 
+    //@Scheduled(cron = "0 30 21 * * 1-5")
     @Scheduled(cron = "0 30 21 * * 1-5")
     public void choiceavgStock() {
         log.info("[choiceavgStock]");
+        dao.execute("truncate table tb_stock_focus");
         long start = System.currentTimeMillis();
 
         Stock.STOCK_CODE_FOCUS.clear();

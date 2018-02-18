@@ -57,7 +57,16 @@ public class BasicDataServiceImpl implements BasicDataService {
             return;
         }
         if (Stock.STOCK_CODE_ALL.isEmpty()) {
-            return;
+            List<Map<String, Object>> liststock = dao.executeQuery("select * from tb_stock_name");
+
+            liststock.forEach((Map<String,Object> m)->{
+               String stockcode =  m.get("stockid")+"";
+               String stockname =  m.get("stockname")+"";
+               Stock.STOCK_CODE_ALL.put(stockcode,stockname);
+            });
+            if(Stock.STOCK_CODE_ALL.isEmpty()){
+                return;
+            }
         }
         Stock.STOCK_CODE_ALL.forEach((code, v) -> {
             String precode = "";
@@ -131,9 +140,6 @@ public class BasicDataServiceImpl implements BasicDataService {
     @Transactional
     public void updateAllStockName() {
 
-        //更新所有内存中的股票代码
-        Stock.STOCK_CODE_ALL.clear();
-
         long start = System.currentTimeMillis();
 
         Set<String> stockcode = new HashSet<>();
@@ -157,6 +163,7 @@ public class BasicDataServiceImpl implements BasicDataService {
 
         Set<Map<String, String>> stockresult = requestStock(stockcode);
         dao.execute("truncate table tb_stock_name");
+        Stock.STOCK_CODE_ALL.clear();
         stockresult.forEach(m -> {
             m.forEach((stcode, stname) -> {
                 try {
