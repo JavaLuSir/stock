@@ -32,7 +32,7 @@ public class DisplayControllerTest {
     }
     @Test
     public void display(){
-        List<Map<String, Object>> result = displayService.displayFocusStock();
+        List<Map<String, Object>> result = displayService.displayFocusStock("");
         log.info(result.toString());
     }
 }

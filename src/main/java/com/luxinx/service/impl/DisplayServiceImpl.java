@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,12 @@ public class DisplayServiceImpl implements DisplayService {
     public IDao dao;
 
     @Override
-    public List<Map<String, Object>> displayFocusStock() {
-        String sql = "select * from tb_stock_focus";
-        return dao.executeQuery(sql);
+    public List<Map<String, Object>> displayFocusStock(String param) {
+        if(StringUtils.isEmpty(param)){
+            return dao.executeQuery("select * from tb_stock_focus");
+        }
+        String sql = "select * from tb_stock_focus where stockcode like ? or stockname like ?";
+        param=param+"%";
+        return dao.executeQuery(sql,new Object[]{param,param});
     }
 }

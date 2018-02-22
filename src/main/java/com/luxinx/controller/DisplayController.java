@@ -36,9 +36,9 @@ public class DisplayController {
      */
     @RequestMapping(value = "price")
     @ResponseBody
-    public String price() {
+    public String price(@RequestParam(required = false) String param) {
         log.info("[price]");
-        List<Map<String, Object>> result = displayService.displayFocusStock();
+        List<Map<String, Object>> result = displayService.displayFocusStock(param);
         return JSONObject.toJSONString(result);
     }
 

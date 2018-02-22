@@ -9,6 +9,6 @@ import java.util.Map;
  */
 public interface DisplayService {
 
-    List<Map<String,Object>> displayFocusStock();
+    List<Map<String,Object>> displayFocusStock(String param);
 
 }
