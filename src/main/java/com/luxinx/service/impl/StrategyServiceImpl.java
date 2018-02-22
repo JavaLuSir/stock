@@ -30,16 +30,32 @@ public class StrategyServiceImpl implements StrategyService {
             if (listprice == null || listprice.isEmpty()||listprice.size()<Integer.parseInt(days)) {
                 return new HashMap<>();
             }
+
             double vollast;
             double volbeforelast;
-            double trend = 0;  //判断股票趋势方向
+
+            double pricelast;
+            double pricebeforelast;
+
+            double voltrend;  //判断股票量比趋势方向
+            double pricetrend;//判断股票价格比趋势方向
+
+            double trend = 0;
             String stockname = "";
             double avgprice;
             double currprice = 0.0;
             if (listprice != null && listprice.size() > 2) {
                 vollast = Double.parseDouble(listprice.get(0).get("vol") + "");
                 volbeforelast = Double.parseDouble(listprice.get(1).get("vol") + "");
-                trend = (vollast / volbeforelast);
+                //如果大于1增量
+                voltrend = (vollast / volbeforelast);
+
+                pricelast = Double.parseDouble(listprice.get(0).get("closeprice") + "");
+                pricebeforelast = Double.parseDouble(listprice.get(1).get("closeprice") + "");
+                pricetrend = (pricelast/pricebeforelast);
+                //量和价格都为上涨 趋势为上涨
+                trend = (voltrend>1&&pricetrend>1)?1:0;
+
                 stockname = listprice.get(0).get("stockname") + "";
                 currprice = ((BigDecimal)listprice.get(0).get("closeprice")).doubleValue();
             }
@@ -55,7 +71,7 @@ public class StrategyServiceImpl implements StrategyService {
             avgprice = total[0].divide(biglistsize, 2, BigDecimal.ROUND_DOWN).doubleValue();
 
 
-            //判断成交量比前一日放量才获取日均线
+            //判断成交量比前一日放量并且价格上涨才获取日均线
             if (trend > 0&&currprice>avgprice) {
                 stockmap.put(code, avgprice+"");
             }

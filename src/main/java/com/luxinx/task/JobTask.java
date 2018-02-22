@@ -36,7 +36,7 @@ public class JobTask {
     @Autowired
     private IDao dao;
 
-    @Scheduled(cron = "0 10 0 * * 1-5")
+    @Scheduled(cron = "0 0 16 * * MON-FRI")
     public void saveStockCodeToDB() {
         log.info("[saveStockCodeToDB]");
         long start = System.currentTimeMillis();
@@ -45,7 +45,7 @@ public class JobTask {
         log.info((end - start) + "ms");
     }
 
-    @Scheduled(cron = "0 0 20 * * 1-5")
+    @Scheduled(cron = "0 0 20 * * MON-FRI")
     public void historyDailyPrice() {
 
         long start = System.currentTimeMillis();
@@ -56,7 +56,7 @@ public class JobTask {
     }
 
 
-    @Scheduled(cron = "0 30 21 * * 1-5")
+    @Scheduled(cron = "0 30 21 * * MON-FRI")
     public void choiceavgStock() {
         if(Stock.STOCK_CODE_ALL.isEmpty()){
             List<Map<String, Object>> liststock = basicDataService.getAllStockCodeName();
@@ -113,7 +113,7 @@ public class JobTask {
                 }
             });
         });
-        log.info(Stock.STOCK_CODE_FOCUS+"");
+        log.info("size:"+Stock.STOCK_CODE_FOCUS.size());
         long end = System.currentTimeMillis();
         log.info((end - start) + "ms");
 

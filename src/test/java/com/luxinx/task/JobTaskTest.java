@@ -36,6 +36,10 @@ public class JobTaskTest {
 
     @Test
     public void saveStockCodeToDB() {
+        long start = System.currentTimeMillis();
+        jobTask.saveStockCodeToDB();
+        long end = System.currentTimeMillis();
+        log.info((end - start) + "ms");
     }
 
     @Test

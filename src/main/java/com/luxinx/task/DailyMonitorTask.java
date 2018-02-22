@@ -19,25 +19,25 @@ public class DailyMonitorTask {
     @Autowired
     private MonitorService monitorService;
 
-    @Scheduled(cron = "* 30-59 9 * * 1-5")
+    @Scheduled(cron = "* 30-59 9 * * MON-FRI")
     private void monitorFocusPriceams() {
         log.info("[monitorFocusPriceams]");
         monitorService.monitorDailyPrice();
     }
 
-    @Scheduled(cron = "* 0-30 11 * * 1-5")
+    @Scheduled(cron = "* 0-30 11 * * MON-FRI")
     private void monitorFocusPriceamz() {
         log.info("[monitorFocusPriceamz]");
         monitorService.monitorDailyPrice();
     }
 
-    @Scheduled(cron = "* * 10,13-14 * * 1-5")
+    @Scheduled(cron = "* * 10,13-14 * * MON-FRI")
     private void monitorFocusPricepm() {
         log.info("[monitorFocusPricepm]");
         monitorService.monitorDailyPrice();
     }
 
-    @Scheduled(cron="0 0 10 * * 1-5")
+    @Scheduled(cron="0 0 10 * * MON-FRI")
     private void monitorEmailSend(){
         log.info("[monitorEmailSend]");
         StringBuffer dn = new StringBuffer();
