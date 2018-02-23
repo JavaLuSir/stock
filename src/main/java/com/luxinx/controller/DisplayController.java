@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +40,14 @@ public class DisplayController {
     @ResponseBody
     public String price(@RequestParam(required = false) String param) {
         log.info("[price]");
-        List<Map<String, Object>> result = displayService.displayFocusStock(param);
+        param=param==null?"":param;
+        String decparam = null;
+        try {
+            decparam = URLDecoder.decode(param,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        List<Map<String, Object>> result = displayService.displayFocusStock(decparam);
         return JSONObject.toJSONString(result);
     }
 
