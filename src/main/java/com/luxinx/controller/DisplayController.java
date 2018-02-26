@@ -40,10 +40,10 @@ public class DisplayController {
     @ResponseBody
     public String price(@RequestParam(required = false) String param) {
         log.info("[price]");
-        param=param==null?"":param;
+        param = param == null ? "" : param;
         String decparam = null;
         try {
-            decparam = URLDecoder.decode(param,"UTF-8");
+            decparam = URLDecoder.decode(param, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -53,6 +53,7 @@ public class DisplayController {
 
     /**
      * get year data need a param year from 10-this year.
+     *
      * @param year example 10\11\12... and so on.
      * @return
      */
@@ -63,7 +64,7 @@ public class DisplayController {
         log.info("[history]");
 
         Thread t = new Thread(() -> {
-            basicDataService.updateTodayStockPrice(year,false);
+            basicDataService.updateTodayStockPrice(year, false);
         });
         t.start();
 

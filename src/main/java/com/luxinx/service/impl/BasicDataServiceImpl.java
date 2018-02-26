@@ -70,10 +70,12 @@ public class BasicDataServiceImpl implements BasicDataService {
         }
         Stock.STOCK_CODE_ALL.forEach((code, v) -> {
             String precode = "";
-            if (code.startsWith("6")) {
-                precode = "sh";
-            } else {
+            if (code.startsWith("0")) {
                 precode = "sz";
+            } else if(code.startsWith("6")){
+                precode = "sh";
+            } else{
+                precode = "";
             }
 
             String result = "";
@@ -147,6 +149,8 @@ public class BasicDataServiceImpl implements BasicDataService {
         for (int i = 600001; i < 604000; i++) {
             stockcode.add("sh" + i);
         }
+        //加入上交所大盘
+        stockcode.add("sh000001");
         //加入深交所大盘
         stockcode.add("sz399001");
         //生成深交所所有代码
