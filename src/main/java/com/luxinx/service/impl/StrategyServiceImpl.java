@@ -105,7 +105,7 @@ public class StrategyServiceImpl implements StrategyService {
             dao.executeUpdate(updatestocktimes,new Object[]{code,stockname});
         }else{
             int inttimes = Integer.parseInt(timesstock.get(0).get("times") + "");
-            int dbtimes = inttimes++;
+            int dbtimes = ++inttimes;
             updatestocktimes = "update tb_stock_times set times=?,updatedate=NOW() where stockcode=?";
             dao.executeUpdate(updatestocktimes,new Object[]{dbtimes,code});
         }
