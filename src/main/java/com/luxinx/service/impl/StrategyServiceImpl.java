@@ -47,6 +47,7 @@ public class StrategyServiceImpl implements StrategyService {
             double currprice = 0.0;
             if (listprice != null && listprice.size() > 2) {
                 if(isStop(listprice.get(0).get("datestr")+"")){
+                    log.error("stock "+listprice.get(0).get("stockcode")+"isStop");
                     return stockmap;
                 }
                 vollast = Double.parseDouble(listprice.get(0).get("vol") + "");
@@ -118,7 +119,7 @@ public class StrategyServiceImpl implements StrategyService {
 
     private boolean isStop(String datestr) {
         String datestrnow = DateUtil.getCurrentDateStr("yyyyMMdd");
-        if(!datestrnow.equals(datestr)){
+        if(!datestrnow.equals("20"+datestr)){
             return true;
         }
         return false;
