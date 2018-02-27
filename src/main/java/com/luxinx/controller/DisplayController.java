@@ -59,7 +59,7 @@ public class DisplayController {
      */
     @RequestMapping(value = "history")
     @ResponseBody
-    public String history(@RequestParam(required = true) String year) {
+    public String history(@RequestParam(required = true) String year,@RequestParam String stockcode) {
 
         log.info("[history]");
 

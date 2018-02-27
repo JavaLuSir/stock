@@ -94,6 +94,20 @@ public class StrategyServiceImpl implements StrategyService {
         }
         String insertfocus = "insert into tb_stock_focus (stockcode,stockname,destprice,updown,issend,datecreated)values(?,?,?,1,0,NOW())";
         dao.executeUpdate(insertfocus, new Object[]{code, stockname, destprice});
+
+        //记录上榜次数
+        String getstocktimes = "select * from tb_stock_times where stockcode = ?";
+        List<Map<String, Object>> timesstock = dao.executeQuery(getstocktimes, new Object[]{code});
+        String updatestocktimes = "";
+        if(timesstock==null||timesstock.isEmpty()){
+            updatestocktimes = "insert into tb_stock_times values(?,1,NOW(),?)";
+            dao.executeUpdate(updatestocktimes,new Object[]{code,stockname});
+        }else{
+            int inttimes = Integer.parseInt(timesstock.get(0).get("times") + "");
+            int dbtimes = inttimes++;
+            updatestocktimes = "update tb_stock_times set times=?,updatedate=NOW() where stockcode=?";
+            dao.executeUpdate(updatestocktimes,new Object[]{dbtimes,code});
+        }
         Map<String, String> smap = new HashMap<>();
         smap.put("updown", "1");
         smap.put("destprice", destprice);
