@@ -26,14 +26,7 @@ public class MonitorServiceImpl implements MonitorService {
         log.info("============================start===================================");
         Stock.STOCK_CODE_FOCUS.forEach((Map<String, String> focus) -> {
             String code = focus.get("stockcode") + "";
-            String precode;
-            if (code.startsWith("0") || code.startsWith("3")) {
-                precode = "sz";
-            } else if (code.startsWith("6")) {
-                precode = "sh";
-            } else {
-                precode = "";
-            }
+            String precode = BasicDataServiceImpl.getString(code);
             try {
                 long st = System.currentTimeMillis();
                 String current = HttpUtil.doGet("http://hq.sinajs.cn/list=" + precode + code);

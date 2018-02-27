@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
@@ -70,13 +71,7 @@ public class BasicDataServiceImpl implements BasicDataService {
         }
         Stock.STOCK_CODE_ALL.forEach((code, v) -> {
             String precode = "";
-            if (code.startsWith("0")) {
-                precode = "sz";
-            } else if(code.startsWith("6")){
-                precode = "sh";
-            } else{
-                precode = "";
-            }
+            precode = getString(code);
 
             String result = "";
             String url;
@@ -136,6 +131,18 @@ public class BasicDataServiceImpl implements BasicDataService {
                 }
             }
         });
+    }
+
+    static String getString(@NotNull String code) {
+        String precode;
+        if (code.startsWith("0")|| code.startsWith("3")) {
+            precode = "sz";
+        } else if(code.startsWith("6")){
+            precode = "sh";
+        } else{
+            precode = "";
+        }
+        return precode;
     }
 
     @Override
