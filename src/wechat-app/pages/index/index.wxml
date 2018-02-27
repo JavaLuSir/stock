@@ -1,0 +1,52 @@
+<view class="page">
+    <view class="page__bd">
+        <view class="weui-tab">
+            <view class="weui-navbar">
+                <block wx:for="{{tabs}}" wx:key="*this">
+                    <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+                        <view class="weui-navbar__title">{{item}}</view>
+                    </view>
+                </block>
+                <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+            </view>
+            <view class="weui-tab__panel">
+                <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+              <view class="weui-cells__title">推荐股票({{datadate}}) 共{{size}}</view>
+              <!--搜索-->
+                  <view class="page__bd">
+        <view class="weui-search-bar">
+            <view class="weui-search-bar__form">
+                <view class="weui-search-bar__box">
+                    <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+                    <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" />
+                    <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+                        <icon type="clear" size="14"></icon>
+                    </view>
+                </view>
+                <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+                    <icon class="weui-icon-search" type="search" size="14"></icon>
+                    <view class="weui-search-bar__text">股票代码或中文名称（暂不支持字母缩写）</view>
+                </label>
+            </view>
+            <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="hideInput">取消</view>
+        </view>
+    </view>
+              <!--搜索-->
+              <view class="weui-cells weui-cells_after-title">
+                <block wx:for="{{stocks}}" wx:key="stkey">
+                  <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                      <view class="weui-cell__bd">{{item.stockname}}</view>
+                      <view class="weui-cell__bd">{{item.destprice}}</view>
+                      <view class="weui-cell__ft weui-cell__ft_in-access">{{item.stockcode}}</view>
+                  </navigator>
+                </block>
+              </view>
+            </view>
+
+                <view class="weui-tab__content" hidden="{{activeIndex != 1}}">选项二的内容</view>
+                <view class="weui-tab__content" hidden="{{activeIndex != 2}}">选项三的内容</view>
+            </view>
+        </view>
+    </view>
+    <view style='text-align:center;color:#ccc;'>没有了...</view>
+</view>
