@@ -70,8 +70,7 @@ public class BasicDataServiceImpl implements BasicDataService {
             }
         }
         Stock.STOCK_CODE_ALL.forEach((code, v) -> {
-            String precode = "";
-            precode = getString(code);
+            String precode = getString(code);
 
             String result = "";
             String url;
@@ -121,6 +120,7 @@ public class BasicDataServiceImpl implements BasicDataService {
                         }
                         String sql = "insert into tb_stock_history values(?,?,?,?,?,?,?,?)";
                         log.info(sql);
+                        log.info(id, code, openprice, closeprice, highprice, lowprice, volumn, datestr);
                         try {
                             dao.executeUpdate(sql, new Object[]{id, code, openprice, closeprice, highprice, lowprice, volumn, datestr});
                         } catch (Exception e) {
@@ -130,6 +130,7 @@ public class BasicDataServiceImpl implements BasicDataService {
 
                 }
             }
+
         });
     }
 
