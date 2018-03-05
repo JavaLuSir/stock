@@ -41,16 +41,19 @@ public class DailyMonitorTask {
     private void monitorEmailSend(){
         log.info("[monitorEmailSend]");
         StringBuffer dn = new StringBuffer();
+
        if(!Stock.EMAIL_QUEUE.isEmpty()){
            Stock.EMAIL_QUEUE.forEach(e->{
                dn.append(e.toString());
            });
        }
         try {
+            log.info(dn.toString());
             MailUtil.sendMessage("javalusir@163.com",dn.toString());
         } catch (MessagingException e1) {
             e1.printStackTrace();
         }
 
     }
+
 }

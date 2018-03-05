@@ -56,6 +56,7 @@ public class MonitorServiceImpl implements MonitorService {
                     if ("-1".equals(updown)) {
                         if (detaprice < 0) {
                             String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经跌破");
+                            log.info("add message "+message);
                             Stock.EMAIL_QUEUE.add(message);
                         }
                     }
@@ -63,6 +64,7 @@ public class MonitorServiceImpl implements MonitorService {
                         if ("1".equals(updown)) {
                             if (detaprice > 0) {
                                 String message = getPrecentStr(focus, destprice, currprice, detaprice, " 已经涨过");
+                                log.info("add message "+message);
                                 Stock.EMAIL_QUEUE.add(message);
                             }
                         }
