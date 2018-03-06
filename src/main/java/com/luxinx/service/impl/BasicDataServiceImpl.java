@@ -71,7 +71,7 @@ public class BasicDataServiceImpl implements BasicDataService {
         }
         Stock.STOCK_CODE_ALL.forEach((code, v) -> {
             String precode = getString(code);
-
+            log.info("get history code "+code+" price");
             String result = "";
             String url;
             try {
@@ -81,6 +81,7 @@ public class BasicDataServiceImpl implements BasicDataService {
             } catch (Exception e) {
                 log.info("Http Exception...");
             }
+
             if (!"".equals(result)) {
                 String[] resultarry = result.split("\\\\n\\\\");
                 if (istoday) {

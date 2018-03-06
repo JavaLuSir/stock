@@ -47,7 +47,7 @@ public class StrategyServiceImpl implements StrategyService {
             double currprice = 0.0;
             if (listprice != null && listprice.size() > 2) {
                 if(isStop(listprice.get(0).get("datestr")+"")){
-                    log.error("stock "+listprice.get(0).get("stockcode")+"isStop");
+                    log.error("stock "+listprice.get(0).get("stockcode")+" isStop");
                     return stockmap;
                 }
                 vollast = Double.parseDouble(listprice.get(0).get("vol") + "");
