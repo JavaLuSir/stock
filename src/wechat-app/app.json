@@ -4,7 +4,7 @@
   ],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "帮你选股",
+    "navigationBarTitleText": "选股小工具",
     "navigationBarBackgroundColor": "#f8f8f8",
     "backgroundColor": "#f8f8f8",
     "enablePullDownRefresh":true
