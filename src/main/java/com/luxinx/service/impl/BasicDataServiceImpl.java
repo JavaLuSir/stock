@@ -183,9 +183,6 @@ public class BasicDataServiceImpl implements BasicDataService {
                 } catch (Exception e) {
                     dao.executeUpdate("update tb_stock_name set stockname=? where stockid=?", new Object[]{stname,stockcode});
                     log.info("SQL Exception...");
-                } finally {
-                    //清空后放入股票代码
-                    Stock.STOCK_CODE_ALL.put(stcode, stname);
                 }
             });
         });
