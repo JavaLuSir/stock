@@ -46,17 +46,21 @@ public class StrategyServiceImpl implements StrategyService {
             double avgprice = 0;
             double currprice = 0.0;
             if (listprice != null && listprice.size() > 2) {
-                if(isStop(listprice.get(0).get("datestr")+"")){
-                    log.error("stock "+listprice.get(0).get("stockcode")+" isStop");
+                if (isStop(listprice.get(0).get("datestr") + "")) {
+                    log.error("stock " + listprice.get(0).get("stockcode") + " isStop");
                     return stockmap;
                 }
+                //最后一天交易量
                 vollast = Double.parseDouble(listprice.get(0).get("vol") + "");
+                //倒数前一天交易量
                 volbeforelast = Double.parseDouble(listprice.get(1).get("vol") + "");
                 //如果大于1增量
                 voltrend = (vollast / volbeforelast);
-
+                //最后一天收盘价格
                 pricelast = Double.parseDouble(listprice.get(0).get("closeprice") + "");
+                //倒数前一天收盘价格
                 pricebeforelast = Double.parseDouble(listprice.get(1).get("closeprice") + "");
+                //价格方向
                 pricetrend = (pricelast / pricebeforelast);
                 //量和价格都为上涨 趋势为上涨
                 trend = (voltrend > 1 && pricetrend > 1) ? 1 : 0;
@@ -100,14 +104,14 @@ public class StrategyServiceImpl implements StrategyService {
         String getstocktimes = "select * from tb_stock_times where stockcode = ?";
         List<Map<String, Object>> timesstock = dao.executeQuery(getstocktimes, new Object[]{code});
         String updatestocktimes = "";
-        if(timesstock==null||timesstock.isEmpty()){
+        if (timesstock == null || timesstock.isEmpty()) {
             updatestocktimes = "insert into tb_stock_times values(?,1,NOW(),?)";
-            dao.executeUpdate(updatestocktimes,new Object[]{code,stockname});
-        }else{
+            dao.executeUpdate(updatestocktimes, new Object[]{code, stockname});
+        } else {
             int inttimes = Integer.parseInt(timesstock.get(0).get("times") + "");
             int dbtimes = ++inttimes;
             updatestocktimes = "update tb_stock_times set times=?,updatedate=NOW() where stockcode=?";
-            dao.executeUpdate(updatestocktimes,new Object[]{dbtimes,code});
+            dao.executeUpdate(updatestocktimes, new Object[]{dbtimes, code});
         }
         Map<String, String> smap = new HashMap<>();
         smap.put("updown", "1");
@@ -117,9 +121,62 @@ public class StrategyServiceImpl implements StrategyService {
         return smap;
     }
 
+    @Override
+    public Map<String, String> avgpriceSelect(String code) {
+        String sqlavg = "select closeprice,vol,tn.stockname,datestr from tb_stock_history th,tb_stock_name tn  where th.stockcode=tn.stockid and stockcode=? order by datestr DESC limit 120";
+        List<Map<String, Object>> listprice = dao.executeQuery(sqlavg, new Object[]{code});
+        if (listprice != null) {
+            List<Map<String, Object>> avg10 = listprice.subList(0, 10);
+            List<Map<String, Object>> avg20 = listprice.subList(0, 20);
+            List<Map<String, Object>> avg25 = listprice.subList(0, 25);
+            List<Map<String, Object>> avg60 = listprice.subList(0, 60);
+            List<Map<String, Object>> avg120 = listprice.subList(0, 120);
+
+            double avgprice10 = calcavgprice(avg10);
+            double avgprice20 = calcavgprice(avg20);
+            double avgprice25 = calcavgprice(avg25);
+            double avgprice60 = calcavgprice(avg60);
+            double avgprice120 = calcavgprice(avg120);
+            if(avgprice10<avgprice20){
+                return new HashMap<>();
+            }
+            if(avgprice20<avgprice25){
+                return new HashMap<>();
+            }
+            if(avgprice25<avgprice60){
+                return new HashMap<>();
+            }
+            if(avgprice60<avgprice120){
+                return new HashMap<>();
+            }
+
+            Map<String, String> smap = new HashMap<>();
+            smap.put("updown", "1");
+            smap.put("destprice", avgprice25+"");
+            smap.put("stockcode", code);
+            smap.put(code, avgprice25+"");
+            return smap;
+        }
+
+        return new HashMap<>();
+    }
+
+    private double calcavgprice(List<Map<String, Object>> list) {
+        if(list==null&&list.isEmpty()){
+            return 0;
+        }
+        BigDecimal total = new BigDecimal(0);
+        for (Map<String, Object> m : list) {
+            BigDecimal price = (BigDecimal) m.get("clsoeprice");
+            total = total.add(price);
+        }
+       return total.doubleValue()/list.size();
+    }
+
+
     private boolean isStop(String datestr) {
         String datestrnow = DateUtil.getCurrentDateStr("yyyyMMdd");
-        if(!datestrnow.equals("20"+datestr)){
+        if (!datestrnow.equals("20" + datestr)) {
             return true;
         }
         return false;

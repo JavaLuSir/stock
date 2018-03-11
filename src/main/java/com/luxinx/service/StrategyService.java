@@ -24,4 +24,11 @@ public interface StrategyService {
      * @return
      */
     Map<String,String> saveChoicedStock(String code, String stockname,String destprice);
+
+    /**
+     * 根据10 / 20 /25 /60 /120 均线依次排列选出股票
+     * @param code
+     * @return
+     */
+    Map<String,String> avgpriceSelect(String code);
 }

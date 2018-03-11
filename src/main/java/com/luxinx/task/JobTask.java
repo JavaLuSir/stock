@@ -77,15 +77,15 @@ public class JobTask {
         Set<Map<String, String>> stock60set = new HashSet<>();
         Set<Map<String, String>> stock120set = new HashSet<>();
 
-        //获取超过25日均线的股票
+        //获取超过120日均线的股票
         Stock.STOCK_CODE_ALL.forEach((k, v) -> {
-            Map<String, String> stock25map = strategyService.choiceavgStock(k, "25");
-            if(!stock25map.isEmpty()){
-                stock25set.add(stock25map);
+            Map<String, String> stock120map = strategyService.choiceavgStock(k, "120");
+            if(!stock120map.isEmpty()){
+                stock120set.add(stock120map);
             }
         });
         //获取超过60日均线的股票
-        stock25set.forEach((Map<String, String> s) -> {
+        stock120set.forEach((Map<String, String> s) -> {
             s.entrySet().forEach(e -> {
                 Map<String, String> stock60map = strategyService.choiceavgStock(e.getKey(), "60");
                 if(!stock60map.isEmpty()){
@@ -94,22 +94,25 @@ public class JobTask {
 
             });
         });
-        //获取超过120日均线的股票
+        //获取超过25日均线的股票
         stock60set.forEach((Map<String, String> s) -> {
             s.entrySet().forEach(e -> {
-                Map<String, String> stock120map = strategyService.choiceavgStock(e.getKey(), "120");
-                if(!stock120map.isEmpty()){
-                    stock120set.add(stock120map);
+                Map<String, String> stock25map = strategyService.choiceavgStock(e.getKey(), "25");
+                if(!stock25map.isEmpty()){
+                    stock25set.add(stock25map);
                 }
             });
         });
-
-        stock120set.forEach((Map<String, String> s) -> {
+        //记录关注的股票并记录上榜次数
+        stock25set.forEach((Map<String, String> s) -> {
             s.entrySet().forEach(e -> {
-                String stockname = Stock.STOCK_CODE_ALL.get(e.getKey());
-                Map<String, String> smap = strategyService.saveChoicedStock(e.getKey(), stockname, e.getValue());
-                if(!smap.isEmpty()){
-                    Stock.STOCK_CODE_FOCUS.add(smap);
+                Map<String, String> mapresult = strategyService.avgpriceSelect(e.getKey());
+                if(!mapresult.isEmpty()) {
+                    String stockname = Stock.STOCK_CODE_ALL.get(e.getKey());
+                    Map<String, String> smap = strategyService.saveChoicedStock(e.getKey(), stockname, e.getValue());
+                    if (!smap.isEmpty()) {
+                        Stock.STOCK_CODE_FOCUS.add(smap);
+                    }
                 }
             });
         });
