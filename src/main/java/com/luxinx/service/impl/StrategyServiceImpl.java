@@ -167,7 +167,7 @@ public class StrategyServiceImpl implements StrategyService {
         }
         BigDecimal total = new BigDecimal(0);
         for (Map<String, Object> m : list) {
-            BigDecimal price = (BigDecimal) m.get("clsoeprice");
+            BigDecimal price = (BigDecimal) m.get("closeprice");
             total = total.add(price);
         }
        return total.doubleValue()/list.size();
